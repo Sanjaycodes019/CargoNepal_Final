@@ -39,6 +39,14 @@ const connectDB = require('./config/db');
 // Connect to database
 connectDB();
 
+// to create uploads folder
+const fs = require('fs');
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+    logger.info('SERVER_STARTUP', { message: 'Uploads directory created' });
+}
+
 const app = express();
 app.set('trust proxy', 1);
 
