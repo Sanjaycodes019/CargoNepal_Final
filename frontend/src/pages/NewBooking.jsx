@@ -229,6 +229,7 @@ const NewBooking = () => {
 
     try {
       console.log('Making booking request to /bookings');
+      console.log('Route data:', route);
       console.log('Request data:', {
         truckId: truck._id,
         pickup: {
@@ -246,18 +247,28 @@ const NewBooking = () => {
         startTime: startDate.toISOString(),
         endTime: endDate.toISOString()
       });
+
+      // Validate that we have coordinates before sending
+      if (!route?.pickup?.lat || !route?.pickup?.lng || !route?.dropoff?.lat || !route?.dropoff?.lng) {
+        console.error('Missing coordinates in route data:', route);
+        toast({
+          type: 'error',
+          message: 'Location coordinates missing. Please search for trucks again.',
+        });
+        return;
+      }
       
       await axiosInstance.post('/bookings', {
         truckId: truck._id,
         pickup: {
           address: formData.pickup.address,
-          lat: route?.pickup?.lat,
-          lng: route?.pickup?.lng
+          lat: route.pickup.lat,
+          lng: route.pickup.lng
         },
         dropoff: {
           address: formData.dropoff.address,
-          lat: route?.dropoff?.lat,
-          lng: route?.dropoff?.lng
+          lat: route.dropoff.lat,
+          lng: route.dropoff.lng
         },
         notes: formData.notes,
         capacityTons: Number(formData.requiredCapacity),

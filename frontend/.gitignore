@@ -12,7 +12,6 @@ node_modules
 .pnp.js
 
 # Environment variables
-.env
 .env.*
 !.env.example
 

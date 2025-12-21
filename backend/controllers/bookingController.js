@@ -44,6 +44,7 @@ const createBooking = async (req, res) => {
     }
 
     const capacityNum = Number(capacityTons);
+    
     if (isNaN(capacityNum) || capacityNum <= 0) {
       logger.warn('BOOKING_VALIDATION_FAILED', { 
         error: 'Invalid capacityTons', 

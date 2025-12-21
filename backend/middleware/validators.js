@@ -73,8 +73,11 @@ const createBookingValidation = [
     .isObject().withMessage('Pickup information is required')
     .custom((value) => {
       if (!value.address) throw new Error('Pickup address is required');
-      if (!value.coordinates || !value.coordinates.lat || !value.coordinates.lng) {
+      if (!value.lat || !value.lng) {
         throw new Error('Pickup coordinates are required');
+      }
+      if (isNaN(value.lat) || isNaN(value.lng)) {
+        throw new Error('Pickup coordinates must be numbers');
       }
       return true;
     }),
@@ -82,8 +85,11 @@ const createBookingValidation = [
     .isObject().withMessage('Dropoff information is required')
     .custom((value) => {
       if (!value.address) throw new Error('Dropoff address is required');
-      if (!value.coordinates || !value.coordinates.lat || !value.coordinates.lng) {
+      if (!value.lat || !value.lng) {
         throw new Error('Dropoff coordinates are required');
+      }
+      if (isNaN(value.lat) || isNaN(value.lng)) {
+        throw new Error('Dropoff coordinates must be numbers');
       }
       return true;
     }),

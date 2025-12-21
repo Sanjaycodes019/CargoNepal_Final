@@ -129,12 +129,14 @@ const OwnerDashboard = () => {
         form.append('image', truckForm.image);
       }
       
-      const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+      // const config = { headers: { 'Content-Type': 'multipart/form-data' } };
 
       if (isEditing) {
         await axiosInstance.put(`/owner/trucks/${editingTruck._id}`, form, config);
       } else {
-        await axiosInstance.post("/owner/trucks", form, config);
+        console.log("before axios post");
+        await axiosInstance.post("/owner/trucks", form);
+        console.log("after axios post");
       }
 
       resetTruckForm();
