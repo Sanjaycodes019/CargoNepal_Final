@@ -41,10 +41,12 @@ connectDB();
 
 // to create uploads folder
 const fs = require('fs');
-const uploadDir = path.join(__dirname, 'uploads');
+// Use process.cwd() to ensure it creates 'uploads' at the root of your backend project
+const uploadDir = path.join(process.cwd(), 'uploads'); 
+
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
-    logger.info('SERVER_STARTUP', { message: 'Uploads directory created' });
+    console.log('Created uploads directory at:', uploadDir);
 }
 
 const app = express();
