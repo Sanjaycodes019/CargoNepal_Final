@@ -68,9 +68,9 @@ const addTruck = async (req, res) => {
     const geo = geoRes.data.results[0];
     if (!geo) return res.status(400).json({ success: false, message: "Invalid location" });
     const location = {
-      lat: geo.geometry.lat,
-      lng: geo.geometry.lng,
-      address: geo.formatted
+    type: "Point",
+    coordinates: [geo.geometry.lng, geo.geometry.lat], // GeoJSON uses [longitude, latitude]
+    address: geo.formatted
     };
 
     let imageUrl = undefined;
