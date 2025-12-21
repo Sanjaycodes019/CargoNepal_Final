@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CargoNepal
 
 A robust, scalable full-stack logistics and cargo management platform built with the MERN stack (MongoDB, Express, React, Node.js), designed for the Nepalese market. CargoNepal enables seamless truck booking, fleet management, and real-time cargo tracking for customers, truck owners, and administrators.
@@ -230,3 +231,7 @@ Pull requests and issues are welcome! Please:
 
 ## License
 [MIT](LICENSE)
+=======
+# CargoNepal_Final
+Scalable MERN stack cargo management system featuring real-time booking, role-based access, and fleet management.
+>>>>>>> 0ae9c8ab0c1b7bed6d1d5b12895eb507b67613cf
