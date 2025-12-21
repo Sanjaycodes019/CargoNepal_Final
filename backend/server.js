@@ -9,6 +9,8 @@ const { initializeSocket } = require('./services/adminNotificationService');
 const logger = require('./utils/logger');
 const { config, validateEnv } = require('./config/env');
 const { apiLimiter } = require('./middleware/rateLimiter');
+const app = express();
+app.set('trust proxy', 1);
 
 // Load env vars - Don't crash if .env is missing (Render uses dashboard env vars)
 try {
@@ -48,9 +50,6 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
     console.log('Created uploads directory at:', uploadDir);
 }
-
-const app = express();
-app.set('trust proxy', 1);
 
 // Security headers with helmet
 app.use(helmet({
@@ -98,7 +97,7 @@ const sanitize = require('./middleware/sanitize');
 app.use(sanitize);
 
 // Apply API rate limiting to all routes (except excluded ones)
-const apiExcludedPaths = ['/health', '/api-docs'];
+const apiExcludedPaths = ['/health', '/api-docs', '/'];
 app.use((req, res, next) => {
   // Skip rate limiting for excluded paths
   if (apiExcludedPaths.some(path => req.path.startsWith(path))) {
