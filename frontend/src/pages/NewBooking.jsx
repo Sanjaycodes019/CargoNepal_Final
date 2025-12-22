@@ -81,9 +81,20 @@ const NewBooking = () => {
 
   // Auto-check conflicts when time or truck changes
   React.useEffect(() => {
-    if (selectedTruck && formData.startTime && formData.endTime) {
+    if (formData.startTime && formData.endTime) {
       const timeoutId = setTimeout(() => {
-        checkConflicts(selectedTruck._id, formData.startTime, formData.endTime);
+        if (selectedTruck) {
+          // Check specific truck availability
+          checkConflicts(selectedTruck._id, formData.startTime, formData.endTime);
+        } else {
+          // Show time validation message without truck selection
+          setCheckingConflicts(false);
+          setConflictCheck({
+            hasConflict: false,
+            message: 'Time slot selected. Please search for trucks to check availability.',
+            conflicts: []
+          });
+        }
       }, 500); // Debounce
 
       return () => clearTimeout(timeoutId);
@@ -224,7 +235,7 @@ const NewBooking = () => {
     });
     if (!ok) return;
 
-    setSelectedTruck(truck._id);
+    setSelectedTruck(truck);
     setSubmitting(true);
 
     try {
@@ -451,9 +462,25 @@ const NewBooking = () => {
             )}
 
             {conflictCheck && (
-              <div className={`rounded-xl p-4 ${conflictCheck.hasConflict ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'}`}>
+              <div className={`rounded-xl p-4 ${
+                !selectedTruck ? 'bg-blue-50 border border-blue-200' : 
+                conflictCheck.hasConflict ? 'bg-red-50 border border-red-200' : 
+                'bg-green-50 border border-green-200'
+              }`}>
                 <div className="flex items-start gap-3">
-                  {conflictCheck.hasConflict ? (
+                  {!selectedTruck ? (
+                    <>
+                      <div className="w-5 h-5 text-blue-600 mt-0.5">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-semibold text-blue-800">Time Slot Selected</h4>
+                        <p className="text-sm text-blue-700 mt-1">{conflictCheck.message}</p>
+                      </div>
+                    </>
+                  ) : conflictCheck.hasConflict ? (
                     <>
                       <div className="w-5 h-5 text-red-600 mt-0.5">
                         <svg fill="currentColor" viewBox="0 0 20 20">
@@ -786,10 +813,10 @@ const NewBooking = () => {
           e.stopPropagation();
           handleBookTruck(truck);
         }}
-        disabled={submitting && selectedTruck === truck._id}
+        disabled={submitting && selectedTruck?._id === truck._id}
         className="w-full py-2 mt-2 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-lg font-semibold hover:from-slate-800 hover:to-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group text-sm"
       >
-        {submitting && selectedTruck === truck._id ? (
+        {submitting && selectedTruck?._id === truck._id ? (
           <>
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             <span>Booking...</span>

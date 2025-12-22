@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { Truck, MapPin, Star, Calendar, Clock, IndianRupee, Route, Filter, Search, X, ChevronDown, Loader2, Phone, Mail, CheckCircle, Activity } from 'lucide-react';
 import axiosInstance from '../utils/axiosInstance';
@@ -113,6 +113,7 @@ const getHaversineDistance = (lat1, lng1, lat2, lng2) => {
 };
 
 const Trucks = () => {
+  const { user } = useContext(AuthContext);
   const [trucks, setTrucks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(10);
@@ -161,12 +162,23 @@ const Trucks = () => {
   
   // Refs for debouncing
   const locationSearchTimeout = useRef(null);
+  const routeCalculationTimeout = useRef(null);
   
   const { toast } = useUiFeedback();
 
   // Check for booking conflicts
   const checkConflicts = async (startTime, endTime) => {
     if (!selectedTruck?._id || !startTime || !endTime) return;
+    
+    // Check if user is authenticated
+    if (!user) {
+      console.log('No user found in auth context');
+      toast({ type: 'error', message: 'Please login to check availability' });
+      return;
+    }
+
+    console.log('Checking conflicts with user:', user);
+    console.log('Selected truck:', selectedTruck);
 
     setCheckingConflicts(true);
     setConflictCheck(null);
@@ -175,6 +187,12 @@ const Trucks = () => {
       // Convert to ISO strings for API
       const startISO = new Date(startTime).toISOString();
       const endISO = new Date(endTime).toISOString();
+
+      console.log('Making conflict check request:', {
+        truckId: selectedTruck._id,
+        startTime: startISO,
+        endTime: endISO
+      });
 
       const response = await axiosInstance.get('/bookings/check-conflicts', {
         params: { 
@@ -194,8 +212,25 @@ const Trucks = () => {
         });
       }
     } catch (error) {
+      console.error('Conflict check error details:', {
+        error: error,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+        truckId: selectedTruck._id,
+        startTime,
+        endTime
+      });
       logger.error('Conflict check failed', { error, truckId: selectedTruck._id, startTime, endTime });
-      toast({ type: 'error', message: 'Failed to check availability' });
+      
+      // Show more specific error message
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.errors?.[0]?.msg || 
+                          error.message || 
+                          'Failed to check availability';
+      
+      toast({ type: 'error', message: errorMessage });
     } finally {
       setCheckingConflicts(false);
     }
@@ -203,14 +238,33 @@ const Trucks = () => {
 
   // Auto-check conflicts when time or truck changes
   useEffect(() => {
-    if (selectedTruck && bookingForm.startTime && bookingForm.endTime) {
+    if (bookingForm.startTime && bookingForm.endTime) {
       const timeoutId = setTimeout(() => {
-        checkConflicts(bookingForm.startTime, bookingForm.endTime);
+        if (selectedTruck) {
+          // Check specific truck availability
+          checkConflicts(bookingForm.startTime, bookingForm.endTime);
+        } else {
+          // Show time validation message without truck selection
+          setCheckingConflicts(false);
+          setConflictCheck({
+            hasConflict: false,
+            message: 'Time slot selected. Please select a truck to check availability.',
+            conflicts: []
+          });
+        }
       }, 500); // Debounce
 
       return () => clearTimeout(timeoutId);
     }
   }, [selectedTruck, bookingForm.startTime, bookingForm.endTime]);
+
+  // Additional effect: check conflicts immediately when truck is selected and times are already set
+  useEffect(() => {
+    if (selectedTruck && bookingForm.startTime && bookingForm.endTime && !conflictCheck) {
+      // Immediate check when truck is selected with existing times
+      checkConflicts(bookingForm.startTime, bookingForm.endTime);
+    }
+  }, [selectedTruck]);
 
   // Calculate route for booking using OSRM directly
   const calculateRoute = async (pickup, dropoff) => {
@@ -685,6 +739,8 @@ const Trucks = () => {
 
   const handleBookNow = (truck) => {
     setSelectedTruck(truck);
+    setConflictCheck(null); // Clear previous conflict checks
+    setCheckingConflicts(false); // Reset checking state
     setBookingModalOpen(true);
   };
 
@@ -701,21 +757,40 @@ const Trucks = () => {
     });
     setConflictCheck(null);
     setRoute(null);
+    
+    // Clear route calculation timeout
+    if (routeCalculationTimeout.current) {
+      clearTimeout(routeCalculationTimeout.current);
+    }
   };
 
   const handleBookingFormChange = (e) => {
     const { name, value } = e.target;
     if (name === "pickup.address") {
       setBookingForm({ ...bookingForm, pickup: { address: value } });
-      // Calculate route when both pickup and dropoff are available
-      if (bookingForm.dropoff.address) {
-        calculateRoute(value, bookingForm.dropoff.address);
+      // Debounced route calculation when both pickup and dropoff are available
+      if (bookingForm.dropoff.address && value.length >= 3 && bookingForm.dropoff.address.length >= 3) {
+        // Clear existing timeout
+        if (routeCalculationTimeout.current) {
+          clearTimeout(routeCalculationTimeout.current);
+        }
+        // Set new timeout for route calculation
+        routeCalculationTimeout.current = setTimeout(() => {
+          calculateRoute(value, bookingForm.dropoff.address);
+        }, 1000); // 1 second debounce
       }
     } else if (name === "dropoff.address") {
       setBookingForm({ ...bookingForm, dropoff: { address: value } });
-      // Calculate route when both pickup and dropoff are available
-      if (bookingForm.pickup.address) {
-        calculateRoute(bookingForm.pickup.address, value);
+      // Debounced route calculation when both pickup and dropoff are available
+      if (bookingForm.pickup.address && bookingForm.pickup.address.length >= 3 && value.length >= 3) {
+        // Clear existing timeout
+        if (routeCalculationTimeout.current) {
+          clearTimeout(routeCalculationTimeout.current);
+        }
+        // Set new timeout for route calculation
+        routeCalculationTimeout.current = setTimeout(() => {
+          calculateRoute(bookingForm.pickup.address, value);
+        }, 1000); // 1 second debounce
       }
     } else {
       setBookingForm({ ...bookingForm, [name]: value });
@@ -842,17 +917,13 @@ const Trucks = () => {
         truckId: selectedTruck._id,
         pickup: {
           address: bookingForm.pickup.address,
-          coordinates: {
-            lat: pickupCoords.lat,
-            lng: pickupCoords.lng
-          }
+          lat: pickupCoords.lat,
+          lng: pickupCoords.lng
         },
         dropoff: {
           address: bookingForm.dropoff.address,
-          coordinates: {
-            lat: dropoffCoords.lat,
-            lng: dropoffCoords.lng
-          }
+          lat: dropoffCoords.lat,
+          lng: dropoffCoords.lng
         },
         notes: bookingForm.notes,
         capacityTons: Number(bookingForm.requiredCapacity),
@@ -1496,9 +1567,25 @@ const Trucks = () => {
                   )}
 
                   {conflictCheck && (
-                    <div className={`rounded-xl p-4 ${conflictCheck.hasConflict ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'}`}>
+                    <div className={`rounded-xl p-4 ${
+                      !selectedTruck ? 'bg-blue-50 border border-blue-200' : 
+                      conflictCheck.hasConflict ? 'bg-red-50 border border-red-200' : 
+                      'bg-green-50 border border-green-200'
+                    }`}>
                       <div className="flex items-start gap-3">
-                        {conflictCheck.hasConflict ? (
+                        {!selectedTruck ? (
+                          <>
+                            <div className="w-5 h-5 text-blue-600 mt-0.5">
+                              <svg fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-sm font-semibold text-blue-800">Time Slot Selected</h4>
+                              <p className="text-sm text-blue-700 mt-1">{conflictCheck.message}</p>
+                            </div>
+                          </>
+                        ) : conflictCheck.hasConflict ? (
                           <>
                             <div className="w-5 h-5 text-red-600 mt-0.5">
                               <svg fill="currentColor" viewBox="0 0 20 20">

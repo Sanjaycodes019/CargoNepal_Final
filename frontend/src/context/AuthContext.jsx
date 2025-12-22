@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch (error) {
-      logger.error('Registration error', { error, formData });
+      logger.error('Registration error', { error, userData });
       return {
         success: false,
         message: error.response?.data?.message || error.message || 'Registration failed. Please check your connection.'

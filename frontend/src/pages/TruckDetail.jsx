@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, Truck, MapPin, Star, Route, Filter, Search, X, ChevronDown, Loader2, Phone, Mail, Activity } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 import { AuthContext } from "../context/AuthContext";
 import BookingMap from "../components/BookingMap";
@@ -473,9 +473,11 @@ const TruckDetail = () => {
     startTime: "",
     endTime: "",
   });
+  const [route, setRoute] = useState(null);
+  const [estimatedPrice, setEstimatedPrice] = useState(null);
   const [pickupCoords, setPickupCoords] = useState(null);
   const [dropoffCoords, setDropoffCoords] = useState(null);
-  const [estimatedPrice, setEstimatedPrice] = useState(null);
+  const routeCalculationTimeout = useRef(null);
   const [submitting, setSubmitting] = useState(false);
   const [calculating, setCalculating] = useState(false);
   const [customerBookings, setCustomerBookings] = useState([]);
@@ -532,20 +534,89 @@ const TruckDetail = () => {
     }
   };
 
+  // Calculate route for booking using OSRM directly
+  const calculateRoute = async (pickup, dropoff) => {
+    if (!pickup || !dropoff) return;
+    
+    try {
+      // Get coordinates for both locations using backend geocoding
+      const pickupResponse = await axiosInstance.get(`/utils/geocode?location=${encodeURIComponent(pickup)}`);
+      const dropoffResponse = await axiosInstance.get(`/utils/geocode?location=${encodeURIComponent(dropoff)}`);
+      
+      if (!pickupResponse.data.success || !dropoffResponse.data.success) {
+        console.log('Could not get coordinates for route calculation');
+        return;
+      }
+      
+      const pickupCoords = {
+        lat: pickupResponse.data.data.lat,
+        lng: pickupResponse.data.data.lng
+      };
+      const dropoffCoords = {
+        lat: dropoffResponse.data.data.lat,
+        lng: dropoffResponse.data.data.lng
+      };
+      
+      // Call OSRM directly
+      const response = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${pickupCoords.lng},${pickupCoords.lat};${dropoffCoords.lng},${dropoffCoords.lat}?overview=full&geometries=geojson&steps=true`,
+        {
+          headers: {
+            'User-Agent': 'CargoNepal/1.0'
+          }
+        }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.routes && data.routes.length > 0) {
+          const routeData = data.routes[0];
+          setRoute({
+            pickup: pickupCoords,
+            dropoff: dropoffCoords,
+            distance: routeData.distance / 1000, // Convert meters to km
+            duration: routeData.duration / 60, // Convert seconds to minutes
+            geometry: routeData.geometry
+          });
+          console.log('Route calculated successfully:', {
+            distance: routeData.distance / 1000,
+            duration: routeData.duration / 60
+          });
+        }
+      }
+    } catch (error) {
+      console.log('Route calculation failed:', error);
+    }
+  };
+
   const handleBookingDataChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes("pickup")) {
-      const field = name.split(".")[1];
-      setBookingData({
-        ...bookingData,
-        pickup: { ...bookingData.pickup, [field]: value },
-      });
-    } else if (name.includes("dropoff")) {
-      const field = name.split(".")[1];
-      setBookingData({
-        ...bookingData,
-        dropoff: { ...bookingData.dropoff, [field]: value },
-      });
+    if (name === "pickup.address") {
+      setBookingData({ ...bookingData, pickup: { address: value } });
+      // Debounced route calculation when both pickup and dropoff are available
+      if (bookingData.dropoff.address && value.length >= 3 && bookingData.dropoff.address.length >= 3) {
+        // Clear existing timeout
+        if (routeCalculationTimeout.current) {
+          clearTimeout(routeCalculationTimeout.current);
+        }
+        // Set new timeout for route calculation
+        routeCalculationTimeout.current = setTimeout(() => {
+          calculateRoute(value, bookingData.dropoff.address);
+        }, 1000); // 1 second debounce
+      }
+    } else if (name === "dropoff.address") {
+      setBookingData({ ...bookingData, dropoff: { address: value } });
+      // Debounced route calculation when both pickup and dropoff are available
+      if (bookingData.pickup.address && bookingData.pickup.address.length >= 3 && value.length >= 3) {
+        // Clear existing timeout
+        if (routeCalculationTimeout.current) {
+          clearTimeout(routeCalculationTimeout.current);
+        }
+        // Set new timeout for route calculation
+        routeCalculationTimeout.current = setTimeout(() => {
+          calculateRoute(bookingData.pickup.address, value);
+        }, 1000); // 1 second debounce
+      }
     } else {
       setBookingData({ ...bookingData, [name]: value });
     }
@@ -695,6 +766,15 @@ const TruckDetail = () => {
       return;
     }
 
+    // Check if required capacity exceeds truck capacity
+    if (truck.capacityTons && Number(bookingData.capacityTons) > Number(truck.capacityTons)) {
+      toast({
+        type: "error",
+        message: `Required capacity (${bookingData.capacityTons} tons) exceeds truck capacity (${truck.capacityTons} tons). Please reduce the required capacity.`,
+      });
+      return;
+    }
+
     // Check if there are conflicts before booking
     if (conflictCheck && conflictCheck.hasConflict) {
       toast({
@@ -789,17 +869,13 @@ const TruckDetail = () => {
         truckId: id,
         pickup: { 
           address: bookingData.pickup.address,
-          coordinates: {
-            lat: finalPickupCoords.lat,
-            lng: finalPickupCoords.lng
-          }
+          lat: finalPickupCoords.lat,
+          lng: finalPickupCoords.lng
         },
         dropoff: { 
           address: bookingData.dropoff.address,
-          coordinates: {
-            lat: finalDropoffCoords.lat,
-            lng: finalDropoffCoords.lng
-          }
+          lat: finalDropoffCoords.lat,
+          lng: finalDropoffCoords.lng
         },
         capacityTons: Number(bookingData.capacityTons),
         notes: bookingData.notes,
@@ -813,9 +889,22 @@ const TruckDetail = () => {
       setShowBookingModal(false);
       navigate("/customer/dashboard");
     } catch (error) {
+      console.error('Booking submission error:', {
+        error: error,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.errors?.[0]?.msg || 
+                          error.message || 
+                          'Failed to create booking';
+      
       toast({
         type: "error",
-        message: error.response?.data?.message || "Failed to create booking",
+        message: errorMessage,
       });
     } finally {
       setSubmitting(false);
@@ -1099,7 +1188,10 @@ const TruckDetail = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               {isCustomer && truck.available && (
                 <button
-                  onClick={() => setShowBookingModal(true)}
+                  onClick={() => {
+                  console.log('Opening booking modal');
+                  setShowBookingModal(true);
+                }}
                   className="flex-1 px-5 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-sm font-medium shadow-sm hover:shadow transition-all active:scale-95"
                 >
                   Request Booking
@@ -1144,7 +1236,9 @@ const TruckDetail = () => {
 
         {/* Booking Modal */}
         {showBookingModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+          <>
+            {console.log('Rendering booking modal, showBookingModal:', showBookingModal)}
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
             <div className="bg-white rounded-xl max-w-xl sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
               <div className="sticky top-0 bg-white border-b border-slate-200 px-4 sm:px-6 py-4 flex justify-between items-center shadow-sm">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
@@ -1203,20 +1297,24 @@ const TruckDetail = () => {
                   <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                     Required Capacity (in tons){" "}
                     <span className="text-red-600">*</span>
+                    <span className="text-xs text-slate-500 ml-2">
+                      (Max: {truck.capacityTons} tons)
+                    </span>
                   </label>
                   <input
                     type="number"
                     name="capacityTons"
-                    placeholder="e.g., 2"
+                    placeholder={`e.g., ${Math.min(1, truck.capacityTons || 1)}`}
                     className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
                     value={bookingData.capacityTons}
                     onChange={handleBookingDataChange}
                     required
                     min="0.1"
                     step="0.1"
+                    max={truck.capacityTons || 999}
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    Enter the weight you want to transport
+                    Enter the weight you want to transport (cannot exceed truck capacity)
                   </p>
                 </div>
 
@@ -1278,28 +1376,34 @@ const TruckDetail = () => {
                 )}
 
                 {conflictCheck && (
-                  <div
-                    className={`rounded-lg p-4 ${conflictCheck.hasConflict ? "bg-red-50 border border-red-200" : "bg-green-50 border border-green-200"}`}
-                  >
+                  <div className={`rounded-lg p-4 ${
+                    !truck ? 'bg-blue-50 border border-blue-200' : 
+                    conflictCheck.hasConflict ? 'bg-red-50 border border-red-200' : 
+                    'bg-green-50 border border-green-200'
+                  }`}>
                     <div className="flex items-start gap-3">
-                      {conflictCheck.hasConflict ? (
+                      {!truck ? (
                         <>
-                          <div className="w-5 h-5 text-red-600 mt-0.5">
+                          <div className="w-5 h-5 text-blue-600 mt-0.5">
                             <svg fill="currentColor" viewBox="0 0 20 20">
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clipRule="evenodd"
-                              />
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <h4 className="text-sm font-semibold text-red-800">
-                              Booking Conflict Detected
-                            </h4>
-                            <p className="text-sm text-red-700 mt-1">
-                              {conflictCheck.message}
-                            </p>
+                            <h4 className="text-sm font-semibold text-blue-800">Time Slot Selected</h4>
+                            <p className="text-sm text-blue-700 mt-1">{conflictCheck.message}</p>
+                          </div>
+                        </>
+                      ) : conflictCheck.hasConflict ? (
+                        <>
+                          <div className="w-5 h-5 text-red-600 mt-0.5">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-sm font-semibold text-red-800">Booking Conflict Detected</h4>
+                            <p className="text-sm text-red-700 mt-1">{conflictCheck.message}</p>
                             {conflictCheck.conflicts.length > 0 && (
                               <div className="mt-2">
                                 <p className="text-xs text-red-600 font-medium">
@@ -1386,6 +1490,24 @@ const TruckDetail = () => {
                     "Calculate Distance & Price"
                   )}
                 </button>
+
+                {/* Route Summary */}
+                {route && (
+                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="font-semibold text-gray-800">Route Distance</p>
+                      <p className="font-bold text-gray-700">
+                        {route.distance.toFixed(1)} km
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                      <p className="font-semibold text-gray-800">Estimated Duration</p>
+                      <p className="font-bold text-gray-700">
+                        {Math.round(route.duration)} minutes
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Estimated Price */}
                 {estimatedPrice && (
@@ -1493,6 +1615,7 @@ const TruckDetail = () => {
               </form>
             </div>
           </div>
+          </>
         )}
 
         {/* Review Modal */}

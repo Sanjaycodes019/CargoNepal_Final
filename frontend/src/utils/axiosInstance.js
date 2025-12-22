@@ -5,10 +5,10 @@ import axios from 'axios';
 // ================================
 // baseURL uses VITE_API_BASE_URL from environment variables
 // For production, set VITE_API_BASE_URL in Vercel dashboard
-// Example: https://your-app-name.onrender.com/api
+// Example: https://your-app-name.onrender.com
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
   headers: { 'Content-Type': 'application/json' },
     timeout: 45000, 
 });

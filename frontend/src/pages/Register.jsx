@@ -39,8 +39,31 @@ const Register = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    // Validate password requirements
+    const passwordRequirements = {
+      minLength: formData.password.length >= 8,
+      hasUppercase: /[A-Z]/.test(formData.password),
+      hasLowercase: /[a-z]/.test(formData.password),
+      hasNumber: /\d/.test(formData.password)
+    };
+
+    if (!passwordRequirements.minLength) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (!passwordRequirements.hasUppercase) {
+      setError('Password must contain at least one uppercase letter');
+      return;
+    }
+
+    if (!passwordRequirements.hasLowercase) {
+      setError('Password must contain at least one lowercase letter');
+      return;
+    }
+
+    if (!passwordRequirements.hasNumber) {
+      setError('Password must contain at least one number');
       return;
     }
 

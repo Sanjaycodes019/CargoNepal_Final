@@ -266,7 +266,7 @@ const AdminProfile = () => {
             </div>
             
             {/* Animated gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20 animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 via-transparent to-gray-600/20 animate-pulse"></div>
             
             {/* Content */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -293,7 +293,7 @@ const AdminProfile = () => {
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span className="text-xs font-medium">Verified Account</span>
                   </div>
-                  <div className="flex items-center gap-1 px-3 py-1 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-400/30">
+                  <div className="flex items-center gap-1 px-3 py-1 bg-gray-500/20 backdrop-blur-sm rounded-full border border-gray-400/30">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -323,7 +323,7 @@ const AdminProfile = () => {
             {/* Profile Picture */}
             <div className="relative -mt-16 sm:-mt-24 w-28 h-28 sm:w-40 sm:h-40 mx-auto sm:mx-0 group">
               <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center border-2 border-white shadow-lg ring-4 ring-gray-100 overflow-hidden cursor-pointer"
-                   onClick={() => !isEditing && setShowProfileOptions(true)}>
+                   onClick={() => setShowProfileOptions(true)}>
                 {profileUser?.profileImageUrl ? (
                   <img
                     src={profileUser?.profileImageUrl}
@@ -410,12 +410,38 @@ const AdminProfile = () => {
           className="hidden"
         />
         
+        {/* Hidden camera input for mobile devices */}
+        <input
+          id="profileCameraInput"
+          type="file"
+          accept="image/*"
+          name="profileCamera"
+          capture="environment"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              handleDirectUpload(file);
+            }
+          }}
+          className="hidden"
+        />
+        
         {/* Profile Options Modal */}
         {showProfileOptions && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-6 m-4 max-w-sm w-full shadow-2xl border border-gray-300">
-              <h3 className="text-lg font-bold text-black mb-4">Update Profile Picture</h3>
-              <div className="space-y-3">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-4 max-w-xs w-full shadow-xl border border-gray-200/50 transform transition-all duration-200 scale-100">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-semibold text-gray-900">Profile Picture</h3>
+                <button
+                  onClick={() => setShowProfileOptions(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="space-y-2">
                 <button
                   onClick={() => {
                     setShowProfileOptions(false);
@@ -431,23 +457,46 @@ const AdminProfile = () => {
                       input.click();
                     }
                   }}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-black rounded-xl font-semibold transition-all active:scale-95"
+                  className="w-full px-3 py-2.5 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
                 >
-                  Upload Photo
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  Upload from Gallery
                 </button>
                 <button
                   onClick={() => {
                     setShowProfileOptions(false);
-                    setCameraOpen(true);
+                    // Try mobile camera input first, fallback to camera modal
+                    const cameraInput = document.getElementById('profileCameraInput');
+                    if (cameraInput) {
+                      cameraInput.onchange = (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          handleDirectUpload(file);
+                        }
+                        cameraInput.onchange = null;
+                      };
+                      cameraInput.click();
+                    } else {
+                      setCameraOpen(true);
+                    }
                   }}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-black rounded-xl font-semibold transition-all active:scale-95"
+                  className="w-full px-3 py-2.5 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                   Take Photo
                 </button>
                 <button
                   onClick={() => setShowProfileOptions(false)}
-                  className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 text-black rounded-xl font-semibold transition-all active:scale-95"
+                  className="w-full px-3 py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
                   Cancel
                 </button>
               </div>
@@ -715,7 +764,22 @@ const EditAdminProfileForm = ({
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={() => setCameraOpen(true)}
+                onClick={() => {
+                  // Try mobile camera input first, fallback to camera modal
+                  const cameraInput = document.getElementById('profileCameraInput');
+                  if (cameraInput) {
+                    cameraInput.onchange = (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleDirectUpload(file);
+                      }
+                      cameraInput.onchange = null;
+                    };
+                    cameraInput.click();
+                  } else {
+                    setCameraOpen(true);
+                  }
+                }}
                 className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-800 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
