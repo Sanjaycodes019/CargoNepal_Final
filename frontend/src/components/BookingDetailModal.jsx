@@ -72,11 +72,11 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 
   const getStatusStyles = (status) => {
     const styles = {
-      pending: 'bg-gray-50 text-gray-500 border-gray-200',
-      accepted: 'bg-gray-100 text-gray-700 border-gray-200',
-      declined: 'bg-white text-gray-400 border-gray-200',
-      in_transit: 'bg-gray-800 text-white border-transparent',
-      completed: 'bg-gray-900 text-white border-transparent',
+      pending: 'bg-gray-100 text-gray-600 border-gray-200',
+      accepted: 'bg-blue-50 text-blue-700 border-blue-100',
+      declined: 'bg-red-50 text-red-700 border-red-100',
+      in_transit: 'bg-amber-50 text-amber-700 border-amber-100',
+      completed: 'bg-green-50 text-green-700 border-green-100',
     };
     return styles[status] || 'bg-gray-50 text-gray-500 border-gray-100';
   };
@@ -85,44 +85,44 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 
   return (
     <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn">
-        
+      <div className="bg-white rounded-xl shadow-xl shadow-gray-100 w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn border border-gray-100">
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
           <div>
-            <h2 className="text-lg font-medium text-gray-800">Booking Details</h2>
-            {booking && <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">Ref: {bookingId.slice(-8).toUpperCase()}</p>}
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight">Booking Details</h2>
+            {booking && <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Ref: {bookingId.slice(-8).toUpperCase()}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-gray-100 rounded-full text-gray-400 transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-full text-gray-900 transition-colors"
+            aria-label="Close"
           >
             <CloseIcon className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
-               <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-800 rounded-full animate-spin"></div>
-               <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">Loading...</p>
+              <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Loading...</p>
             </div>
           ) : !booking ? (
             <div className="text-center py-20">
-               <p className="text-sm font-medium text-gray-400">Booking not found</p>
+              <p className="text-sm font-medium text-gray-500">Booking not found</p>
             </div>
           ) : (
             <>
               {/* Truck Profile Card */}
-              <div className="flex items-center gap-4 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
-                <div className="w-16 h-16 rounded-xl bg-white border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-sm">
+              <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                <div className="w-16 h-16 rounded-xl bg-gray-50 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
                   {(() => { 
                     const imgSrc = booking.truck?.imageUrl || booking.truck?.image; 
                     return imgSrc ? (
                       <img
                         src={imgSrc}
                         alt="Truck"
-                        className="w-full h-full object-cover grayscale-[20%]"
+                        className="w-full h-full object-cover"
                       />
                     ) : <TruckIcon className="w-6 h-6 text-gray-300" />;
                   })()}
@@ -130,16 +130,16 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center mb-1">
-                    <h3 className="text-[15px] font-semibold text-gray-800 truncate">
+                    <h3 className="text-base font-bold text-gray-900 truncate">
                       {booking.truck?.title || 'Heavy Load Truck'}
                     </h3>
-                    <span className={`px-2 py-0.5 rounded text-[9px] font-medium border uppercase tracking-wider ${getStatusStyles(booking.status)}`}>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${getStatusStyles(booking.status)}`}>
                       {booking.status.replace('_', ' ')}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">
+                  <p className="text-sm text-gray-600 font-medium">
                     {userRole === 'owner' ? 'Client' : 'Provider'}: 
-                    <span className="text-gray-800 ml-1">
+                    <span className="text-gray-900 ml-1">
                       {userRole === 'owner' ? booking.customer?.name : (booking.owner?.name || 'Authorized Partner')}
                     </span>
                   </p>
@@ -147,49 +147,57 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
               </div>
 
               {/* Route Timeline - Visual Pin Style */}
-              <div className="space-y-4 px-1">
-                <h4 className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Route Information</h4>
-                <div className="relative flex flex-col gap-6 ml-2">
-                  <div className="absolute left-[7px] top-2 bottom-2 w-[1px] bg-gray-100"></div>
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Route Information</h4>
+                <div className="relative flex flex-col gap-6 pl-2">
+                  <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-gray-200"></div>
                   
                   <div className="flex items-start gap-4 relative z-10">
-                    <PinIcon className="w-3.5 h-3.5 text-gray-300 mt-1 bg-white" />
+                    <div className="flex-shrink-0 mt-1 w-4 h-4 rounded-full bg-gray-900 flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
                     <div>
-                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1 leading-none">Pickup</p>
-                      <p className="text-[13px] font-medium text-gray-700 leading-snug">{booking.pickup?.address || 'N/A'}</p>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Pickup</p>
+                      <p className="text-sm font-medium text-gray-900 leading-snug">{booking.pickup?.address || 'Not specified'}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 relative z-10">
-                    <PinIcon className="w-3.5 h-3.5 text-gray-800 mt-1 bg-white" />
+                    <div className="flex-shrink-0 mt-1 w-4 h-4 rounded-full border-2 border-gray-900 flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-gray-900 rounded-full"></div>
+                    </div>
                     <div>
-                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1 leading-none">Dropoff</p>
-                      <p className="text-[13px] font-medium text-gray-700 leading-snug">{booking.dropoff?.address || 'N/A'}</p>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Dropoff</p>
+                      <p className="text-sm font-medium text-gray-900 leading-snug">{booking.dropoff?.address || 'Not specified'}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Est. Distance</p>
-                  <p className="text-lg font-semibold text-gray-800">{booking.distanceKm} <span className="text-xs text-gray-400 font-normal">km</span></p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Est. Distance</p>
+                  <p className="text-lg font-black text-gray-900">
+                    {booking.distanceKm || '0'} <span className="text-xs font-medium text-gray-500">km</span>
+                  </p>
                 </div>
-                <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Fare</p>
-                  <p className="text-lg font-semibold text-gray-800">₹{booking.price?.toLocaleString()}</p>
+                <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Total Fare</p>
+                  <p className="text-lg font-black text-gray-900">
+                    ₹{booking.price?.toLocaleString() || '0'}
+                  </p>
                 </div>
               </div>
 
               {/* Truck Specs Grid */}
               {booking.truck && (
                 <div className="space-y-3">
-                  <h4 className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Specifications</h4>
-                  <div className="grid grid-cols-3 gap-3">
-                    <SpecItem label="Type" value={booking.truck.type} />
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Specifications</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    <SpecItem label="Type" value={booking.truck.type || 'N/A'} />
                     <SpecItem label="Capacity" value={`${booking.truck.capacityTons || '0'} T`} />
-                    <SpecItem label="Base Rate" value={`₹${booking.truck.ratePerKm}/km`} />
+                    <SpecItem label="Rate" value={`₹${booking.truck.ratePerKm || '0'}/km`} />
                   </div>
                 </div>
               )}
@@ -197,8 +205,10 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
               {/* Customer Instructions */}
               {booking.notes && (
                 <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Instructions</p>
-                  <p className="text-xs text-gray-600 leading-relaxed font-medium italic">"{booking.notes}"</p>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Special Instructions</p>
+                  <div className="bg-white p-3 rounded-lg border border-gray-100">
+                    <p className="text-sm text-gray-700 leading-relaxed">"{booking.notes}"</p>
+                  </div>
                 </div>
               )}
             </>
@@ -207,22 +217,35 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 
         {/* Footer Actions */}
         {!loading && booking && (
-          <div className="p-5 bg-white border-t border-gray-100">
+          <div className="p-4 sm:p-6 bg-white border-t border-gray-100">
             {userRole === 'owner' && booking.status === 'pending' && (
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => handleStatusUpdate('accepted')}
                   disabled={updating}
-                  className="px-6 py-2.5 bg-gray-800 text-white rounded-lg font-medium text-xs hover:bg-black transition-all disabled:opacity-50"
+                  className="px-4 py-2.5 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-gray-800 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {updating ? 'Updating...' : 'Accept Booking'}
+                  {updating ? (
+                    <>
+                      <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Processing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckIcon className="w-3.5 h-3.5" />
+                      <span>Accept</span>
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={() => handleStatusUpdate('declined')}
                   disabled={updating}
-                  className="px-6 py-2.5 bg-white text-gray-500 border border-gray-200 rounded-lg font-medium text-xs hover:bg-gray-50 transition-all disabled:opacity-50"
+                  className="px-4 py-2.5 bg-white text-gray-900 border border-gray-300 rounded-lg font-bold text-sm hover:bg-gray-50 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Decline
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span>Decline</span>
                 </button>
               </div>
             )}
@@ -231,9 +254,21 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
               <button
                 onClick={() => handleStatusUpdate('in_transit')}
                 disabled={updating}
-                className="w-full px-6 py-2.5 bg-gray-800 text-white rounded-lg font-medium text-xs hover:bg-black transition-all"
+                className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
               >
-                {updating ? 'Updating...' : 'Start Transit Trip'}
+                {updating ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span>Start Transit</span>
+                  </>
+                )}
               </button>
             )}
 
@@ -241,28 +276,38 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
               <button
                 onClick={() => handleStatusUpdate('completed')}
                 disabled={updating}
-                className="w-full px-6 py-2.5 bg-gray-800 text-white rounded-lg font-medium text-xs hover:bg-black transition-all"
+                className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
               >
-                Confirm Completion
+                {updating ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckIcon className="w-3.5 h-3.5" />
+                    <span>Mark as Delivered</span>
+                  </>
+                )}
               </button>
             )}
 
             {booking.status === 'completed' && userRole === 'customer' && (
               <button
                 onClick={async () => {
-                   // Logic for download as before...
+                  // Logic for download as before...
                 }}
-                className="w-full px-6 py-2.5 bg-gray-800 text-white rounded-lg font-medium text-xs hover:bg-black transition-all flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
               >
                 <DownloadIcon className="w-3.5 h-3.5" />
-                Download PDF Invoice
+                <span>Download Invoice</span>
               </button>
             )}
             
             {booking.status === 'completed' && userRole === 'owner' && (
-              <div className="flex items-center justify-center gap-2 py-2 text-gray-400">
-                <CheckIcon className="w-4 h-4" />
-                <span className="text-[10px] font-semibold uppercase tracking-widest">Trip Successfully Delivered</span>
+              <div className="flex items-center justify-center gap-2 py-1.5 px-3 bg-gray-50 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Successfully Delivered</span>
               </div>
             )}
           </div>
@@ -275,9 +320,9 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 /* --- Internal Modular Components --- */
 
 const SpecItem = ({ label, value }) => (
-  <div className="bg-white border border-gray-100 rounded-lg p-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-    <p className="text-[8px] font-bold text-gray-400 uppercase mb-0.5">{label}</p>
-    <p className="text-[11px] font-semibold text-gray-700 truncate">{value || 'N/A'}</p>
+  <div className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm">
+    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">{label}</p>
+    <p className="text-sm font-semibold text-gray-900 truncate">{value || '—'}</p>
   </div>
 );
 

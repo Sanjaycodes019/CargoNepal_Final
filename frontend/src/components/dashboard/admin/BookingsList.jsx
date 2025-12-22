@@ -222,19 +222,19 @@ const BookingCard = ({
   const getStatusStyles = (status) => {
     switch (status?.toLowerCase()) {
       case "completed":
-        return "bg-gray-900 text-white border-gray-900";
+        return "bg-gray-900 text-white border-transparent";
       case "accepted":
         return "bg-white text-gray-900 border-gray-900";
       case "pending":
-        return "bg-gray-100 text-gray-700 border-gray-300";
+        return "bg-gray-50 text-gray-700 border-gray-300";
       case "cancelled":
-        return "bg-white text-gray-500 border-gray-300";
+        return "bg-white text-gray-400 border-gray-200";
       case "declined":
-        return "bg-white text-gray-500 border-gray-300";
+        return "bg-white text-gray-400 border-gray-200";
       case "in_transit":
-        return "bg-white text-gray-900 border-gray-900";
+        return "bg-white text-gray-900 border-gray-900 font-bold";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-300";
+        return "bg-gray-50 text-gray-700 border-gray-300";
     }
   };
 
@@ -385,11 +385,11 @@ const BookingCard = ({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
+    <div className="bg-white rounded-xl shadow-xl shadow-gray-100 border border-gray-100 hover:shadow-2xl transition-all duration-200 overflow-hidden">
+      <div className="px-4 sm:px-6 py-3 border-b border-gray-100">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="w-14 h-14 rounded-lg bg-gray-50 border border-gray-200 overflow-hidden flex items-center justify-center flex-shrink-0">
               {truckImageUrl ? (
                 <img
                   src={truckImageUrl}
@@ -402,38 +402,38 @@ const BookingCard = ({
                 />
               ) : null}
               <div
-                className="w-full h-full flex items-center justify-center bg-gray-100"
+                className="w-full h-full flex items-center justify-center bg-gray-50"
                 style={{ display: truckImageUrl ? "none" : "flex" }}
               >
-                <div className="w-9 h-9 rounded-md bg-white border border-gray-200 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                <div className="w-10 h-10 rounded-md bg-white border border-gray-200 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
                 </div>
               </div>
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <h3 className="text-sm sm:text-[15px] font-semibold text-gray-900 truncate">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate">
                   {truckTitle}
                 </h3>
-                <span className="text-[10px] text-gray-400 font-medium">{bookingIdShort}</span>
+                <span className="text-[10px] text-gray-500 font-bold tracking-wider">{bookingIdShort}</span>
               </div>
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-600 min-w-0">
-                <span className="truncate">{truckType}</span>
-                <span className="text-gray-300">•</span>
-                <span>{(booking.capacityTons ?? booking.truck?.capacityTons) || "N/A"}T</span>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="text-xs font-medium text-gray-700">{truckType}</span>
+                <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                <span className="text-xs font-medium text-gray-700">{(booking.capacityTons ?? booking.truck?.capacityTons) || "N/A"}T</span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className={`px-2.5 py-1 rounded text-[10px] font-semibold border ${getStatusStyles(booking.status)}`}>
+            <span className={`px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wider border ${getStatusStyles(booking.status)}`}>
               {formatStatus(booking.status) || "PENDING"}
             </span>
             {booking.paymentStatus === "paid" && (
-              <span className="px-2.5 py-1 rounded bg-black text-white text-[10px] font-semibold">
+              <span className="px-3 py-1.5 rounded-full bg-gray-900 text-white text-[10px] font-bold tracking-wider">
                 PAID
               </span>
             )}
@@ -441,43 +441,53 @@ const BookingCard = ({
         </div>
       </div>
 
-      <div className="px-4 py-3">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex-1 min-w-0">
-            <div className="text-[10px] text-gray-500 font-medium mb-1">FROM</div>
-            <div className="text-xs font-semibold text-gray-900 truncate">{pickupText || "—"}</div>
+      <div className="px-4 sm:px-6 py-4">
+        <div className="relative bg-gray-50 rounded-xl p-4 mb-4">
+          <div className="absolute -top-2 left-4 bg-white px-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Route</span>
           </div>
-          <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-          <div className="flex-1 min-w-0 text-right">
-            <div className="text-[10px] text-gray-500 font-medium mb-1">TO</div>
-            <div className="text-xs font-semibold text-gray-900 truncate">{dropoffText || "—"}</div>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">FROM</div>
+              <div className="text-sm font-medium text-gray-900 truncate">{pickupText || "—"}</div>
+            </div>
+            <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+            </svg>
+            <div className="flex-1 min-w-0">
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">TO</div>
+              <div className="text-sm font-medium text-gray-900 truncate">{dropoffText || "—"}</div>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-[10px] text-gray-500 font-medium mb-0.5">AMOUNT</div>
-            <div className="text-sm font-bold text-gray-900">₹{booking.price ?? "—"}</div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">AMOUNT</div>
+            <div className="text-xl font-black text-gray-900 tracking-tight">₹{booking.price ?? "—"}</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-[10px] text-gray-500 font-medium mb-0.5">DISTANCE</div>
-            <div className="text-sm font-bold text-gray-900">{booking.distanceKm ?? "—"} km</div>
+          <div className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">DISTANCE</div>
+            <div className="text-xl font-black text-gray-900 tracking-tight">{booking.distanceKm ?? "—"} km</div>
           </div>
         </div>
       </div>
 
-      <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+      <div className="px-4 sm:px-6 py-3 bg-gray-50 border-t border-gray-100">
         <div className="flex items-center justify-between gap-3">
-          <div className="text-xs text-gray-500">
-            {booking.createdAt
-              ? new Date(booking.createdAt).toLocaleDateString("en-US", {
+          <div className="text-xs font-medium text-gray-500">
+            {booking.createdAt ? (
+              <div className="flex items-center gap-1">
+                <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {new Date(booking.createdAt).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
-                })
-              : "-"}
+                })}
+              </div>
+            ) : "-"}
           </div>
 
           <div className="flex items-center gap-2">
@@ -486,9 +496,9 @@ const BookingCard = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              className="px-3 py-1.5 bg-gray-900 text-white rounded text-xs font-semibold hover:bg-gray-800 transition-colors"
+              className="px-4 py-2 bg-gray-900 text-white rounded-lg text-xs font-bold tracking-wider hover:bg-gray-800 transition-all duration-200 active:scale-95 shadow-sm"
             >
-              Edit
+              EDIT BOOKING
             </button>
 
             <button
@@ -496,10 +506,11 @@ const BookingCard = ({
                 e.stopPropagation();
                 toggleExpanded();
               }}
-              className="p-1.5 hover:bg-white rounded transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors group"
+              aria-label={expanded ? "Collapse details" : "Expand details"}
             >
               <svg
-                className={`w-4 h-4 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+                className={`w-5 h-5 text-gray-500 transition-transform duration-200 group-hover:text-gray-900 ${expanded ? "rotate-180" : ""}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
