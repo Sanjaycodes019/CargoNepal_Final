@@ -11,9 +11,9 @@ node_modules
 .pnp
 .pnp.js
 
-# Environment variables
-.env.*
-!.env.example
+# Environment variable
+.env
+.env.example
 
 # Build output
 dist
@@ -69,6 +69,7 @@ yarn-error.log*
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
 
 # Environment files (except example)
 !.env.example
