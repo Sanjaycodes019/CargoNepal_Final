@@ -579,18 +579,24 @@ const Profile = () => {
                 <button
                   onClick={() => {
                     setShowProfileOptions(false);
-                    // Try mobile camera input first, fallback to camera modal
-                    const cameraInput = document.getElementById('profileCameraInput');
-                    if (cameraInput) {
-                      cameraInput.onchange = (e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          handleDirectUpload(file);
-                        }
-                        cameraInput.onchange = null;
-                      };
-                      cameraInput.click();
+                    // Check if mobile device and use native camera, otherwise use camera modal
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    
+                    if (isMobile) {
+                      // Use native camera on mobile devices
+                      const cameraInput = document.getElementById('profileCameraInput');
+                      if (cameraInput) {
+                        cameraInput.onchange = (e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            handleDirectUpload(file);
+                          }
+                          cameraInput.onchange = null;
+                        };
+                        cameraInput.click();
+                      }
                     } else {
+                      // Use camera modal on desktop
                       setCameraOpen(true);
                     }
                   }}

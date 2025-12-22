@@ -226,11 +226,16 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
                     <button
                       type="button"
                       onClick={() => {
-                        // Open real device camera
-                        if (cameraInputRef.current) {
-                          cameraInputRef.current.click();
+                        // Check if mobile device and use native camera, otherwise use camera modal
+                        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                        
+                        if (isMobile) {
+                          // Use native camera on mobile devices
+                          if (cameraInputRef.current) {
+                            cameraInputRef.current.click();
+                          }
                         } else {
-                          // Fallback to camera modal
+                          // Use camera modal on desktop
                           setCameraOpen(true);
                         }
                       }}

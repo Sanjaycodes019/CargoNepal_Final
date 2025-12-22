@@ -7,14 +7,26 @@ const CameraModal = ({ isOpen, onCapture, onClose }) => {
 
   React.useEffect(() => {
     if (isOpen) {
-      navigator.mediaDevices.getUserMedia({ video: true })
+      // Request camera access with proper constraints for both mobile and desktop
+      const constraints = {
+        video: {
+          facingMode: 'environment', // Use rear camera on mobile, default on desktop
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      };
+      
+      navigator.mediaDevices.getUserMedia(constraints)
         .then((mediaStream) => {
           setStream(mediaStream);
           if (videoRef.current) {
             videoRef.current.srcObject = mediaStream;
           }
         })
-        .catch(() => setError("Cannot access camera. Please allow permission."));
+        .catch((err) => {
+          console.error('Camera access error:', err);
+          setError("Cannot access camera. Please allow permission and ensure camera is available.");
+        });
     }
     return () => {
       if (stream) {
