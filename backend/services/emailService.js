@@ -9,6 +9,33 @@ const logger = require('../utils/logger');
  * @throws {Error} If email configuration is missing or sending fails
  */
 const sendOTPEmail = async (email, otp) => {
+  // Try Brevo API first (works on Render)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const SibApiV3Sdk = require('sib-api-v3-sdk');
+      const defaultClient = SibApiV3Sdk.ApiClient.instance;
+      defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+      
+      const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      const sendSmtpEmail = {
+        to: [{ email }],
+        sender: { 
+          email: process.env.MAIL_USER || 'noreply@cargonepal.com',
+          name: 'CargoNepal'
+        },
+        subject: 'Your CargoNepal Email Verification Code',
+        htmlContent: getOTPEmailTemplate(otp),
+      };
+      
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      logger.info('EMAIL_SENT_SUCCESS', { service: 'Brevo API', email });
+      return { messageId: 'brevo-success' };
+    } catch (brevoError) {
+      logger.error('BREVO_API_FAILED', { email, error: brevoError.message });
+    }
+  }
+  
+  // Fallback to Gmail SMTP
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     logger.error('EMAIL_SERVICE_UNAVAILABLE', {
       reason: 'configuration_missing',
@@ -26,12 +53,13 @@ const sendOTPEmail = async (email, otp) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
+    logger.info('EMAIL_SENT_SUCCESS', { service: 'Gmail SMTP', email });
     return info;
   } catch (error) {
     logger.error('EMAIL_SEND_FAILED', {
       email,
       error: error.message,
-      type: 'otp_verification'
+      type: 'otp'
     });
     throw error;
   }
@@ -66,6 +94,33 @@ const getOTPEmailTemplate = (otp) => {
  * @throws {Error} If email configuration is missing or sending fails
  */
 const sendPasswordResetEmail = async (email, otp) => {
+  // Try Brevo first (works on Render, 300 emails/day free)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const SibApiV3Sdk = require('sib-api-v3-sdk');
+      const defaultClient = SibApiV3Sdk.ApiClient.instance;
+      defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+      
+      const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      const sendSmtpEmail = {
+        to: [{ email }],
+        sender: { 
+          email: process.env.BREVO_FROM_EMAIL || process.env.MAIL_USER,
+          name: 'CargoNepal'
+        },
+        subject: 'CargoNepal Password Reset Code',
+        htmlContent: getPasswordResetEmailTemplate(otp),
+      };
+      
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      logger.info('EMAIL_SENT_SUCCESS', { service: 'Brevo', email, type: 'password_reset' });
+      return { messageId: 'brevo-success' };
+    } catch (brevoError) {
+      logger.error('BREVO_FAILED', { email, error: brevoError.message, type: 'password_reset' });
+    }
+  }
+  
+  // Fallback to Gmail SMTP
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     logger.error('EMAIL_SERVICE_UNAVAILABLE', {
       reason: 'configuration_missing',
@@ -123,6 +178,33 @@ const getPasswordResetEmailTemplate = (otp) => {
 const sendContactNotification = async (contactData) => {
   const timestamp = new Date().toISOString();
   
+  // Try Brevo first (works on Render, 300 emails/day free)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const SibApiV3Sdk = require('sib-api-v3-sdk');
+      const defaultClient = SibApiV3Sdk.ApiClient.instance;
+      defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+      
+      const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      const sendSmtpEmail = {
+        to: [{ email: process.env.BREVO_FROM_EMAIL || process.env.MAIL_USER }],
+        sender: { 
+          email: process.env.BREVO_FROM_EMAIL || process.env.MAIL_USER,
+          name: 'CargoNepal Contact Form'
+        },
+        subject: `New Contact Form Submission: ${contactData.subject}`,
+        htmlContent: getContactNotificationTemplate(contactData),
+      };
+      
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      logger.info('EMAIL_SENT_SUCCESS', { service: 'Brevo', type: 'contact_notification' });
+      return { messageId: 'brevo-success' };
+    } catch (brevoError) {
+      logger.error('BREVO_FAILED', { error: brevoError.message, type: 'contact_notification' });
+    }
+  }
+  
+  // Fallback to Gmail SMTP
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     logger.error('EMAIL_SERVICE_UNAVAILABLE', {
       reason: 'configuration_missing',
@@ -162,6 +244,33 @@ const sendContactNotification = async (contactData) => {
 const sendContactConfirmation = async (userData) => {
   const timestamp = new Date().toISOString();
   
+  // Try Brevo first (works on Render, 300 emails/day free)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const SibApiV3Sdk = require('sib-api-v3-sdk');
+      const defaultClient = SibApiV3Sdk.ApiClient.instance;
+      defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+      
+      const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      const sendSmtpEmail = {
+        to: [{ email: userData.email }],
+        sender: { 
+          email: process.env.BREVO_FROM_EMAIL || process.env.MAIL_USER,
+          name: 'CargoNepal'
+        },
+        subject: 'Thank you for contacting CargoNepal',
+        htmlContent: getContactConfirmationTemplate(userData),
+      };
+      
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      logger.info('EMAIL_SENT_SUCCESS', { service: 'Brevo', email: userData.email, type: 'contact_confirmation' });
+      return { messageId: 'brevo-success' };
+    } catch (brevoError) {
+      logger.error('BREVO_FAILED', { email: userData.email, error: brevoError.message, type: 'contact_confirmation' });
+    }
+  }
+  
+  // Fallback to Gmail SMTP
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     logger.error('EMAIL_SERVICE_UNAVAILABLE', {
       reason: 'configuration_missing',
@@ -354,6 +463,52 @@ const sendBookingStatusUpdateEmail = async ({
 }) => {
   const timestamp = new Date().toISOString();
 
+  // Try Brevo first (works on Render, 300 emails/day free)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const SibApiV3Sdk = require('sib-api-v3-sdk');
+      const defaultClient = SibApiV3Sdk.ApiClient.instance;
+      defaultClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
+      
+      const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      
+      const statusLabels = {
+        accepted: 'Accepted',
+        in_transit: 'In Transit',
+        completed: 'Completed',
+        cancelled: 'Cancelled',
+      };
+      
+      const statusLabel = statusLabels[status] || 'Updated';
+      const subject = `CargoNepal Booking ${statusLabel}`;
+      
+      const sendSmtpEmail = {
+        to: [{ email: to }],
+        sender: { 
+          email: process.env.BREVO_FROM_EMAIL || process.env.MAIL_USER,
+          name: 'CargoNepal'
+        },
+        subject,
+        htmlContent: getBookingStatusEmailTemplate({
+          customerName,
+          truckTitle,
+          statusLabel,
+          bookingId,
+          pickupAddress,
+          dropoffAddress,
+          price,
+        }),
+      };
+      
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      logger.info('EMAIL_SENT_SUCCESS', { service: 'Brevo', email: to, type: 'booking_status' });
+      return { messageId: 'brevo-success' };
+    } catch (brevoError) {
+      logger.error('BREVO_FAILED', { email: to, error: brevoError.message, type: 'booking_status' });
+    }
+  }
+  
+  // Fallback to Gmail SMTP
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     logger.error('EMAIL_SERVICE_UNAVAILABLE', {
       reason: 'configuration_missing',
