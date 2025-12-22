@@ -233,7 +233,7 @@ const BookingMap = ({ pickup, dropoff, distance, onRouteCalculated }) => {
           )}
         </div>
       </div>
-      <div ref={mapRef} className="h-64 rounded-lg border border-gray-300" />
+      <div ref={mapRef} className="h-64 rounded-lg border border-gray-300 relative z-10" style={{ zIndex: 1 }} />
       <div className="mt-2 flex items-center justify-center space-x-6 text-xs text-gray-600">
         <div className="flex items-center">
           <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
