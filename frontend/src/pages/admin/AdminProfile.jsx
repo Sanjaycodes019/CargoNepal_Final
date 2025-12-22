@@ -247,136 +247,156 @@ const AdminProfile = () => {
 
         {/* Main Container */}
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          {/* Cover Photo Area - Advanced Design */}
-          <div className="h-40 sm:h-56 w-full relative overflow-hidden">
-            {/* Multi-layer gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-700 via-slate-600 to-slate-800"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          {/* Cover Photo Area - Premium Enhanced Design */}
+          <div className="h-40 sm:h-56 w-full relative overflow-hidden group">
+            {/* Hardcoded cover image with parallax effect */}
+            <img 
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80" 
+              alt="Admin Cover" 
+              className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-125 transition-all duration-1000 ease-out"
+            />
             
-            {/* Geometric pattern overlay */}
-            <div className="absolute inset-0 opacity-20">
-              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
+            {/* Premium gradient overlay with glassmorphism */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-purple-900/50 to-indigo-900/60 backdrop-blur-[1px]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+            
+            {/* Animated light sweep effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-2000 ease-out"></div>
             </div>
             
-            {/* Animated gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 via-transparent to-gray-600/20 animate-pulse"></div>
+            {/* Enhanced animated gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/5 to-indigo-600/10 animate-pulse"></div>
             
-            {/* Content */}
+            {/* Premium floating particles effect */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-4 left-8 w-1 h-1 bg-white/40 rounded-full animate-ping"></div>
+              <div className="absolute top-12 right-12 w-1 h-1 bg-white/30 rounded-full animate-ping animation-delay-1000"></div>
+              <div className="absolute bottom-8 left-16 w-1 h-1 bg-white/50 rounded-full animate-ping animation-delay-2000"></div>
+              <div className="absolute top-6 right-6 w-0.5 h-0.5 bg-white/40 rounded-full animate-ping animation-delay-3000"></div>
+              <div className="absolute bottom-12 right-8 w-1 h-1 bg-white/35 rounded-full animate-ping animation-delay-4000"></div>
+            </div>
+            
+            {/* Content with enhanced animations */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-white text-center px-4">
-                {/* Top decorative line */}
-                <div className="w-20 h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-4"></div>
+              <div className="text-white text-center px-4 transform transition-all duration-500 group-hover:scale-105">
+                {/* Enhanced top decorative line with glow */}
+                <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mx-auto mb-4 shadow-lg shadow-cyan-400/50 animate-pulse"></div>
                 
-                {/* Main title with icon */}
+                {/* Premium main title with enhanced typography */}
                 <div className="flex items-center justify-center gap-3 mb-3">
-                  <div className="p-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl shadow-white/10 transform transition-all duration-300 group-hover:rotate-12 group-hover:scale-110">
+                    <svg className="w-8 h-8 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-bold tracking-wide">System Administrator</div>
-                    <div className="text-xs sm:text-sm font-light opacity-90 tracking-widest uppercase">Management System</div>
+                  <div className="transform transition-all duration-300 group-hover:translate-x-1">
+                    <div className="text-2xl sm:text-3xl font-black tracking-wider bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent drop-shadow-lg">System Administrator</div>
+                    <div className="text-xs sm:text-sm font-light opacity-90 tracking-widest uppercase text-cyan-100 drop-shadow">Management System</div>
                   </div>
                 </div>
                 
-                {/* Status badges */}
-                <div className="flex items-center justify-center gap-4 mb-3">
-                  <div className="flex items-center gap-1 px-3 py-1 bg-green-500/20 backdrop-blur-sm rounded-full border border-green-400/30">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs font-medium">Verified Account</span>
+                {/* Enhanced status badges with premium styling */}
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-md rounded-full border border-green-400/40 shadow-lg shadow-green-400/20 transform transition-all duration-300 hover:scale-105">
+                    <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-pulse shadow-lg shadow-green-400"></div>
+                    <span className="text-xs font-semibold text-green-100">Verified Account</span>
                   </div>
-                  <div className="flex items-center gap-1 px-3 py-1 bg-gray-500/20 backdrop-blur-sm rounded-full border border-gray-400/30">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-md rounded-full border border-purple-400/40 shadow-lg shadow-purple-400/20 transform transition-all duration-300 hover:scale-105">
+                    <svg className="w-3 h-3 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-xs font-medium">Admin Level</span>
+                    <span className="text-xs font-semibold text-purple-100">Admin Level</span>
                   </div>
                 </div>
                 
-                {/* Platform info */}
-                <div className="text-xs opacity-75 font-light">
-                  CargoNepal Management Platform • Enterprise Edition
+                {/* Enhanced platform info with premium typography */}
+                <div className="text-xs opacity-80 font-light tracking-wide text-blue-100 drop-shadow">
+                  <span className="bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">CargoNepal Management Platform</span>
+                  <span className="mx-2 text-white/60">•</span>
+                  <span className="text-yellow-200 font-medium">Enterprise Edition</span>
                 </div>
                 
-                {/* Bottom decorative line */}
-                <div className="w-20 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mt-4"></div>
+                {/* Enhanced bottom decorative line with dual glow */}
+                <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-white/60 to-transparent mx-auto mt-4 shadow-lg shadow-white/30"></div>
               </div>
             </div>
             
-            {/* Corner decorations */}
-            <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-white/20"></div>
-            <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-white/20"></div>
-            <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-white/20"></div>
-            <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-white/20"></div>
+            {/* Premium corner decorations with enhanced styling */}
+            <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-white/30 shadow-lg shadow-white/20"></div>
+            <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-white/30 shadow-lg shadow-white/20"></div>
+            <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-white/30 shadow-lg shadow-white/20"></div>
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-white/30 shadow-lg shadow-white/20"></div>
           </div>
 
-          {/* Profile Header & Info */}
-          <div className="px-4 sm:px-6 lg:px-8 pt-2 pb-4 sm:pb-6 relative border-b border-gray-200">
-            {/* Profile Picture */}
+          {/* Enhanced Profile Header & Info */}
+          <div className="px-4 sm:px-6 lg:px-8 pt-2 pb-4 sm:pb-6 relative border-b border-gray-200/50 bg-gradient-to-b from-gray-50/50 to-transparent">
+            {/* Enhanced Profile Picture */}
             <div className="relative -mt-16 sm:-mt-24 w-28 h-28 sm:w-40 sm:h-40 mx-auto sm:mx-0 group">
-              <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center border-2 border-white shadow-lg ring-4 ring-gray-100 overflow-hidden cursor-pointer"
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center border-3 border-white shadow-2xl ring-4 ring-gray-100/50 ring-offset-2 ring-offset-white overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-3xl"
                    onClick={() => setShowProfileOptions(true)}>
                 {profileUser?.profileImageUrl ? (
                   <img
                     src={profileUser?.profileImageUrl}
                     alt="Profile"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
                   />
                 ) : null}
                 <div
-                  className="w-full h-full flex items-center justify-center bg-gray-200"
+                  className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300"
                   style={{ display: profileUser?.profileImageUrl ? 'none' : 'flex' }}
                 >
-                  <span className="text-black font-extrabold text-3xl sm:text-4xl">
+                  <span className="text-black font-extrabold text-3xl sm:text-4xl bg-gradient-to-br from-gray-700 to-gray-900 bg-clip-text text-transparent">
                     {profileUser?.name?.charAt(0)?.toUpperCase() || 'A'}
                   </span>
                 </div>
               </div>
-              {/* Admin Badge - Scalloped design */}
-              <div className="absolute -bottom-1 -right-1">
-                <VerifiedBadge size={24} />
+              {/* Enhanced Admin Badge */}
+              <div className="absolute -bottom-1 -right-1 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                <VerifiedBadge size={28} />
               </div>
-              {/* Edit Profile Picture Overlay */}
+              {/* Enhanced Edit Profile Picture Overlay */}
               {isEditing && (
-                <div className="absolute inset-0 w-full h-full rounded-full bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                <div className="absolute inset-0 w-full h-full rounded-full bg-gradient-to-br from-black/70 to-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer border-2 border-white/20"
                      onClick={(e) => {
                        e.stopPropagation();
                        document.getElementById('profileImageInput')?.click();
                      }}>
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                  <div className="flex flex-col items-center justify-center">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span className="text-xs text-white font-medium">Edit Photo</span>
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Name and Details */}
+            {/* Enhanced Name and Details */}
             <div className="sm:ml-44 mt-3 sm:mt-0 text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold text-black truncate">
-                {getValue(profileUser?.name, 'Administrator')}
-              </h1>
+              <div className="space-y-1">
+                <h1 className="text-2xl sm:text-3xl font-black text-gray-900 truncate tracking-tight">
+                  {getValue(profileUser?.name, 'Administrator')}
+                </h1>
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-lg shadow-green-500/50"></div>
+                  <span className="text-sm font-medium text-gray-600">Active Administrator</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Profile Content */}
-          <div className="p-4 sm:p-6 lg:p-8 space-y-6">
-            {/* First Row - Intro and Statistics Cards */}
+          {/* Enhanced Profile Content */}
+          <div className="p-4 sm:p-6 lg:p-8 space-y-8 bg-gradient-to-b from-gray-50/30 to-white">
+            {/* Enhanced First Row - Intro and Statistics Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <AdminIntroCard user={profileUser} formatDate={formatDate} getValue={getValue} />
               <AdminStatsCard stats={stats} profileUser={profileUser} />
             </div>
 
-            {/* Edit Form */}
-            <div>
+            {/* Enhanced Edit Form */}
+            <div className="transform transition-all duration-500">
               {isEditing ? (
                 <EditAdminProfileForm
                   user={profileUser}
@@ -426,22 +446,22 @@ const AdminProfile = () => {
           className="hidden"
         />
         
-        {/* Profile Options Modal */}
+        {/* Enhanced Profile Options Modal */}
         {showProfileOptions && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-4 max-w-xs w-full shadow-xl border border-gray-200/50 transform transition-all duration-200 scale-100">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-semibold text-gray-900">Profile Picture</h3>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-200/50 transform transition-all duration-300 scale-100">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-900">Profile Picture</h3>
                 <button
                   onClick={() => setShowProfileOptions(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                 >
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <button
                   onClick={() => {
                     setShowProfileOptions(false);
@@ -457,9 +477,9 @@ const AdminProfile = () => {
                       input.click();
                     }
                   }}
-                  className="w-full px-3 py-2.5 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
+                  className="w-full px-4 py-3.5 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 border border-gray-300 text-gray-800 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 hover:shadow-md transform hover:scale-105"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                   Upload from Gallery
@@ -482,9 +502,9 @@ const AdminProfile = () => {
                       setCameraOpen(true);
                     }
                   }}
-                  className="w-full px-3 py-2.5 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
+                  className="w-full px-4 py-3.5 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 border border-gray-300 text-gray-800 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 hover:shadow-md transform hover:scale-105"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -492,9 +512,9 @@ const AdminProfile = () => {
                 </button>
                 <button
                   onClick={() => setShowProfileOptions(false)}
-                  className="w-full px-3 py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center gap-2 hover:shadow-sm"
+                  className="w-full px-4 py-3.5 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 hover:shadow-md transform hover:scale-105"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                   </svg>
                   Cancel
@@ -506,13 +526,13 @@ const AdminProfile = () => {
         
         <CameraModal isOpen={cameraOpen} onCapture={handleCapture} onClose={() => setCameraOpen(false)} />
         
-        {/* Floating Action Button for Edit Profile */}
+        {/* Enhanced Floating Action Button for Edit Profile */}
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="fixed bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:scale-110 z-50"
+            className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl hover:from-gray-800 hover:to-gray-700 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group hover:scale-110 z-50 border border-gray-700/50"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 transform transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -520,7 +540,7 @@ const AdminProfile = () => {
                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
-            <span className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
               Edit Profile
             </span>
           </button>
@@ -530,11 +550,14 @@ const AdminProfile = () => {
   );
 };
 
-// Helper Components
+// Enhanced Helper Components
 const Card = ({ title, children }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200">
-    <div className="p-6 border-b border-gray-100">
-      <h3 className="text-lg font-black text-black tracking-tight">{title}</h3>
+  <div className="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-white to-gray-50/50">
+    <div className="p-6 border-b border-gray-100/50 bg-gradient-to-r from-gray-50/50 to-transparent">
+      <h3 className="text-lg font-black text-gray-900 tracking-tight flex items-center gap-2">
+        <div className="w-1 h-6 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full"></div>
+        {title}
+      </h3>
     </div>
     <div className="p-6">
       {children}
@@ -545,7 +568,7 @@ const Card = ({ title, children }) => (
 const AdminIntroCard = ({ user, formatDate, getValue }) => {
   return (
     <Card title="Administrator Information">
-      <div className="space-y-3 text-sm">
+      <div className="space-y-4 text-sm">
         <DetailField label="Account Type" value="SYSTEM ADMINISTRATOR" icon="shield" />
         <DetailField label="Email" value={getValue(user?.email)} icon="mail" />
         <DetailField label="Phone" value={getValue(user?.phone)} icon="phone" />
@@ -559,64 +582,68 @@ const AdminIntroCard = ({ user, formatDate, getValue }) => {
 const AdminStatsCard = ({ stats, profileUser }) => {
   return (
     <Card title="Platform Statistics">
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <StatCard 
           label="Total Users" 
           value={stats.totalUsers.toString()}
           icon={
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           }
           hasData={stats.totalUsers > 0}
+          color="gray"
         />
         <StatCard 
           label="Total Trucks" 
           value={stats.totalTrucks.toString()}
           icon={
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
           }
           hasData={stats.totalTrucks > 0}
+          color="gray"
         />
         <StatCard 
           label="Total Bookings" 
           value={stats.totalBookings.toString()}
           icon={
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           }
           hasData={stats.totalBookings > 0}
+          color="gray"
         />
         <StatCard 
           label="Active Bookings" 
           value={stats.activeBookings.toString()}
           icon={
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           }
           hasData={stats.activeBookings > 0}
+          color="gray"
         />
       </div>
     </Card>
   );
 };
 
-const StatCard = ({ label, value, icon, hasData = true }) => {
+const StatCard = ({ label, value, icon, hasData = true, color = "gray" }) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-3 text-center hover:shadow-sm transition-all duration-200 flex-1 min-w-[120px]">
-      <div className="flex items-center justify-center gap-2 mb-1">
-        <div className="flex-shrink-0">
+    <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer">
+      <div className="flex items-center justify-center mb-3">
+        <div className="p-2 bg-white rounded-lg shadow-sm">
           {icon}
         </div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{label}</p>
       </div>
-      <p className="text-lg font-black text-black">{value}</p>
+      <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-2xl font-black text-gray-900">{value}</p>
       {!hasData && (
-        <p className="text-xs text-gray-500 mt-1">No data yet</p>
+        <p className="text-xs text-gray-500 mt-2 font-medium">No data yet</p>
       )}
     </div>
   );
@@ -626,28 +653,28 @@ const DetailField = ({ label, value, icon }) => {
   const getIcon = (iconType) => {
     const icons = {
       shield: (
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
       mail: (
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       ),
       phone: (
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
         </svg>
       ),
       location: (
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       ),
       calendar: (
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
@@ -656,13 +683,13 @@ const DetailField = ({ label, value, icon }) => {
   };
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-all duration-200">
-      <div className="flex-shrink-0 w-8 h-8 bg-white rounded-lg border border-gray-300 flex items-center justify-center">
+    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-md cursor-pointer group">
+      <div className="flex-shrink-0 w-10 h-10 bg-white rounded-xl border border-gray-300 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-300">
         {getIcon(icon)}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">{label}</p>
-        <p className="text-sm font-medium text-gray-900 truncate">{value}</p>
+        <p className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">{label}</p>
+        <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-gray-700 transition-colors duration-300">{value}</p>
       </div>
     </div>
   );
@@ -679,16 +706,18 @@ const EditAdminProfileForm = ({
 }) => {
   return (
     <Card title="Edit Administrator Profile">
-      <form onSubmit={onSubmit} className="space-y-6">
-        {/* Personal Information Section */}
-        <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-          <h4 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
+      <form onSubmit={onSubmit} className="space-y-8">
+        {/* Enhanced Personal Information Section */}
+        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 shadow-sm">
+          <h4 className="text-sm font-bold text-gray-800 mb-6 flex items-center gap-3">
+            <div className="p-2 bg-gray-200 rounded-lg">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
             Personal Information
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <FormField
               label="Full Name"
               name="name"
@@ -740,21 +769,22 @@ const EditAdminProfileForm = ({
           </div>
         </div>
 
-        {/* Profile Picture Section */}
-        <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-          <h4 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+        {/* Enhanced Profile Picture Section */}
+        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 shadow-sm">
+          <h4 className="text-sm font-bold text-gray-800 mb-6 flex items-center gap-3">
+            <div className="p-2 bg-gray-200 rounded-lg">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
             Profile Picture
           </h4>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <FormField
               name="profileImage"
               type="file"
               onChange={onChange}
               accept="image/*"
-              capture="environment"
               icon={
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -765,7 +795,7 @@ const EditAdminProfileForm = ({
               <button
                 type="button"
                 onClick={() => {
-                  // Try mobile camera input first, fallback to camera modal
+                  // Open device camera directly
                   const cameraInput = document.getElementById('profileCameraInput');
                   if (cameraInput) {
                     cameraInput.onchange = (e) => {
@@ -777,10 +807,11 @@ const EditAdminProfileForm = ({
                     };
                     cameraInput.click();
                   } else {
+                    // Fallback to camera modal if input not found
                     setCameraOpen(true);
                   }
                 }}
-                className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-800 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 font-semibold hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-md"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -792,12 +823,12 @@ const EditAdminProfileForm = ({
           </div>
         </div>
 
-        {/* Form Actions */}
-        <div className="flex gap-3 pt-4">
+        {/* Enhanced Form Actions */}
+        <div className="flex gap-4 pt-6">
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3.5 bg-gray-900 text-white rounded-xl font-black hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg shadow-gray-900/25"
           >
             {submitting ? (
               <>
@@ -817,7 +848,7 @@ const EditAdminProfileForm = ({
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-6 py-3 bg-white text-gray-700 rounded-lg font-semibold hover:bg-gray-50 border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="px-6 py-3.5 bg-white text-gray-700 rounded-xl font-semibold hover:bg-gray-50 border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 hover:shadow-md"
           >
             Cancel
           </button>
@@ -829,11 +860,11 @@ const EditAdminProfileForm = ({
 
 const FormField = ({ label, name, value, onChange, type = 'text', disabled = false, className = '', required = false, icon, ...props }) => {
   return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
+    <div className="space-y-2">
+      <label className="block text-sm font-semibold text-gray-700">
+        {label} {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      <div className="relative">
+      <div className="relative group">
         {icon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             {icon}
@@ -846,7 +877,7 @@ const FormField = ({ label, name, value, onChange, type = 'text', disabled = fal
           onChange={onChange}
           disabled={disabled}
           required={required}
-          className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent ${icon ? 'pl-10' : ''} ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'} ${className}`}
+          className={`w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 ${icon ? 'pl-10' : ''} ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white hover:border-gray-400'} ${className}`}
           {...props}
         />
       </div>

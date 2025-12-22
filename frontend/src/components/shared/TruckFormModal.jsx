@@ -6,6 +6,7 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
   const [cameraOpen, setCameraOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   if (!isOpen) return null;
 
@@ -15,6 +16,18 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
     const file = new File([blob], `truck-photo-${Date.now()}.jpg`, { type: "image/jpeg" });
     const event = { target: { name: "image", type: "file", files: [file] } };
     onChange(event);
+  };
+
+  const handleCameraCapture = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const event = { target: { name: "image", type: "file", files: [file] } };
+      onChange(event);
+    }
+    // Reset the input
+    if (cameraInputRef.current) {
+      cameraInputRef.current.value = '';
+    }
   };
 
   const handleDragOver = (e) => {
@@ -194,6 +207,17 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
                   accept="image/*"
                   value=""
                 />
+                
+                {/* Hidden camera input for real device camera */}
+                <input
+                  type="file"
+                  name="cameraImage"
+                  ref={cameraInputRef}
+                  onChange={handleCameraCapture}
+                  className="hidden"
+                  accept="image/*"
+                  capture="environment"
+                />
               </div>
 
               {/* Mobile Camera Button */}
@@ -201,7 +225,15 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
                  <div className="flex justify-center pt-2">
                     <button
                       type="button"
-                      onClick={() => setCameraOpen(true)}
+                      onClick={() => {
+                        // Open real device camera
+                        if (cameraInputRef.current) {
+                          cameraInputRef.current.click();
+                        } else {
+                          // Fallback to camera modal
+                          setCameraOpen(true);
+                        }
+                      }}
                       className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-gray-500 hover:text-black transition-colors px-4 py-2 rounded-lg hover:bg-gray-100"
                     >
                       <CameraIcon className="w-4 h-4" />
