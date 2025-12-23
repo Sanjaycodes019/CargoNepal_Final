@@ -459,7 +459,7 @@ const Profile = () => {
               <p className="text-sm sm:text-base text-gray-700 font-normal mb-3">
                 {getValue(profileUser?.email, 'No Email Provided')}
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3 flex-wrap sm:flex-nowrap">
                 <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 text-white border border-gray-600 uppercase tracking-wider shadow-lg">
                   {profileUser?.role?.toUpperCase() || 'USER'}
                 </span>

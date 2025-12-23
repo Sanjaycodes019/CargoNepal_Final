@@ -58,26 +58,26 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
       <div className="relative bg-white w-full h-full sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-2xl overflow-hidden shadow-2xl flex flex-col animate-fadeIn">
         
         {/* Header - Sticky on Mobile */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-white sticky top-0 z-20">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-20">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+            <h2 className="text-lg sm:text-xl font-black text-gray-900 tracking-tight">
               {editingTruck ? "Edit Truck Details" : "Add New Truck"}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 bg-gray-50 hover:bg-gray-200 rounded-full text-gray-600 transition-colors"
+            className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700 transition-colors"
           >
-            <CloseIcon className="w-5 h-5" />
+            <CloseIcon className="w-4 h-4" />
           </button>
         </div>
 
         {/* Scrollable Form Content */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 custom-scrollbar">
           <form id="truck-form" onSubmit={onSubmit}>
             
             {/* Row 1: Title & Type */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputGroup
                 label="Truck Title"
                 name="title"
@@ -97,7 +97,7 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
             </div>
 
             {/* Row 2: Capacity & Rate */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputGroup
                 label="Capacity"
                 name="capacityTons"
@@ -121,8 +121,8 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
             </div>
 
             {/* Row 3: Drag & Drop Photo Area */}
-            <div className="space-y-3">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="block text-xs font-black text-gray-600 uppercase tracking-wider">
                 Truck Photo <span className="text-black">*</span>
               </label>
               
@@ -130,14 +130,14 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`relative group border-2 border-dashed rounded-2xl min-h-[160px] flex flex-col items-center justify-center transition-all duration-300 ease-in-out cursor-pointer
+                className={`relative group border-2 border-dashed rounded-xl min-h-[120px] flex flex-col items-center justify-center transition-all duration-300 ease-in-out cursor-pointer
                   ${isDragging ? "border-black bg-gray-50" : "border-gray-300 hover:border-gray-500 hover:bg-gray-50"}
-                  ${formData.imagePreview ? "border-solid border-gray-200 p-2" : "p-8"}
+                  ${formData.imagePreview ? "border-solid border-gray-200 p-2" : "p-6"}
                 `}
               >
                 {formData.imagePreview ? (
                   // Image Preview
-                  <div className="relative w-full h-48 md:h-56 rounded-xl overflow-hidden">
+                  <div className="relative w-full h-36 md:h-44 rounded-lg overflow-hidden">
                     <img 
                       src={formData.imagePreview} 
                       alt="Preview" 
@@ -195,13 +195,13 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
             </div>
 
             {/* Row 4: Description & Location */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Description</label>
+                <label className="block text-xs font-black text-gray-600 uppercase tracking-wider">Description</label>
                 <textarea
                   name="description"
-                  rows="3"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all text-sm resize-none placeholder-gray-400 font-medium"
+                  rows="2"
+                  className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all text-sm resize-none placeholder-gray-400 font-bold"
                   value={formData.description}
                   onChange={onChange}
                   placeholder="Describe key features..."
@@ -221,10 +221,10 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
             </div>
             
             {/* Row 5: Availability Toggle */}
-            <div className="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-gray-900">Availability</span>
-                <span className="text-xs text-gray-500">Is this truck active?</span>
+                <span className="text-sm font-black text-gray-900">Availability</span>
+                <span className="text-xs font-bold text-gray-600">Is this truck active?</span>
               </div>
               <Toggle 
                 checked={formData.available} 
@@ -238,22 +238,22 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-6 border-t border-gray-100 bg-white sm:rounded-b-3xl z-20">
-            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
+        <div className="p-3 sm:p-4 border-t border-gray-100 bg-white sm:rounded-b-3xl z-20">
+            <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
                 <button
                     type="button"
                     onClick={onClose}
-                    className="w-full sm:flex-1 px-6 py-3.5 border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:text-black transition-all text-sm"
+                    className="w-full sm:flex-1 px-5 py-2.5 border border-gray-300 text-gray-700 font-black rounded-lg hover:bg-gray-50 hover:text-black transition-all text-sm"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
                     form="truck-form"
-                    className="w-full sm:flex-1 px-6 py-3.5 bg-black text-white font-bold rounded-xl shadow-lg hover:bg-gray-900 active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 px-5 py-2.5 bg-black text-white font-black rounded-lg shadow-lg hover:bg-gray-900 active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-2"
                 >
                     {editingTruck ? "Save Changes" : "Add Truck"}
-                    <ArrowRightIcon className="w-4 h-4 text-gray-300" />
+                    <ArrowRightIcon className="w-3.5 h-3.5 text-gray-300" />
                 </button>
             </div>
         </div>
@@ -272,12 +272,12 @@ const TruckFormModal = ({ isOpen, onClose, onSubmit, formData, onChange, editing
 
 const InputGroup = ({ label, name, type = "text", value, onChange, placeholder, required, step, leftIcon, rightIcon, helpText }) => (
   <div className="w-full">
-    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+    <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1">
       {label} {required && <span className="text-black">*</span>}
     </label>
     <div className="relative group">
       {leftIcon && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-600">
           {leftIcon}
         </div>
       )}
@@ -289,8 +289,8 @@ const InputGroup = ({ label, name, type = "text", value, onChange, placeholder, 
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black block p-3.5 transition-all font-semibold placeholder-gray-400
-          ${leftIcon ? "pl-10" : ""} ${rightIcon ? "pr-14" : ""}
+        className={`w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black block p-2.5 transition-all font-black placeholder-gray-500
+          ${leftIcon ? "pl-9" : ""} ${rightIcon ? "pr-12" : ""}
         `}
       />
       {rightIcon && (
@@ -305,7 +305,7 @@ const InputGroup = ({ label, name, type = "text", value, onChange, placeholder, 
 
 const SelectGroup = ({ label, name, value, onChange, options, placeholder }) => (
   <div className="w-full">
-    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+    <label className="block text-xs font-black text-gray-600 uppercase tracking-wider mb-1">
       {label}
     </label>
     <div className="relative">
@@ -313,15 +313,15 @@ const SelectGroup = ({ label, name, value, onChange, options, placeholder }) => 
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black block p-3.5 pr-8 transition-all font-semibold cursor-pointer"
+        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black block p-2.5 pr-8 transition-all font-black cursor-pointer"
       >
         <option value="" className="text-gray-400">{placeholder}</option>
         {options.map((opt) => (
           <option key={opt} value={opt.toLowerCase()}>{opt}</option>
         ))}
       </select>
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-600">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
       </div>
     </div>
   </div>

@@ -614,7 +614,7 @@ const AdminVerification = () => {
                           Contact Information
                         </h3>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                         <div className="bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 text-center hover:shadow-md transition-all duration-200 cursor-pointer">
                           <div className="inline-flex p-1.5 sm:p-2 bg-gray-100 rounded-lg mb-2 sm:mb-3">
                             <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -692,43 +692,44 @@ const AdminVerification = () => {
                   /* Customer Specific Content - Same layout as truck */
                   <div>
                     {/* Customer Details Section - Ultra Compact */}
-                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200 mb-3">
-                      <div className="flex justify-between items-center">
-                        <div className="bg-white rounded-lg px-3 py-2 border border-gray-200 shadow-sm flex-1 mr-2">
+                    <div className="bg-gray-50 rounded-lg p-2 border border-gray-200 mb-3">
+                      {/* Keep in same line but make smaller for mobile */}
+                      <div className="flex justify-between items-center gap-1 sm:gap-2">
+                        <div className="bg-white rounded-lg px-2 py-1.5 border border-gray-200 shadow-sm flex-1 min-w-0">
                           <div className="text-center">
-                            <div className="flex items-center justify-center gap-1.5 mb-1">
-                              <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center justify-center gap-1 mb-0.5">
+                              <svg className="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13 2.257a1 1 0 001.21.502l4.493 1.498a1 1 0 00.684-.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z" />
                               </svg>
-                              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Phone</p>
+                              <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Phone</p>
                             </div>
-                            <p className="text-xs font-semibold text-gray-900 truncate" title={user.phone || "N/A"}>
+                            <p className="text-[10px] font-semibold text-gray-900 truncate" title={user.phone || "N/A"}>
                               {user.phone || "N/A"}
                             </p>
                           </div>
                         </div>
-                        <div className="bg-white rounded-lg px-3 py-2 border border-gray-200 shadow-sm flex-1 mx-2">
+                        <div className="bg-white rounded-lg px-2 py-1.5 border border-gray-200 shadow-sm flex-1 min-w-0">
                           <div className="text-center">
-                            <div className="flex items-center justify-center gap-1.5 mb-1">
-                              <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center justify-center gap-1 mb-0.5">
+                              <svg className="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
-                              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Member Since</p>
+                              <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Member Since</p>
                             </div>
-                            <p className="text-xs font-semibold text-gray-900 truncate" title={formatDate(user.createdAt)}>
+                            <p className="text-[10px] font-semibold text-gray-900 truncate" title={formatDate(user.createdAt)}>
                               {formatDate(user.createdAt)}
                             </p>
                           </div>
                         </div>
-                        <div className="bg-white rounded-lg px-3 py-2 border border-gray-200 shadow-sm flex-1 ml-2">
+                        <div className="bg-white rounded-lg px-2 py-1.5 border border-gray-200 shadow-sm flex-1 min-w-0">
                           <div className="text-center">
-                            <div className="flex items-center justify-center gap-1.5 mb-1">
-                              <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2V2a2 2 0 01-2 2H9a2 2 0 01-2-2V7a2 2 0 012-2zm0 9a2 2 0 002 2V2a2 2 0 01-2 2H9a2 2 0 01-2-2V-2a2 2 0 012-2z" />
+                            <div className="flex items-center justify-center gap-1 mb-0.5">
+                              <svg className="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                               </svg>
-                              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Bookings</p>
+                              <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Bookings</p>
                             </div>
-                            <p className="text-xs font-semibold text-gray-900 truncate" title={user.totalBookings || '0'}>
+                            <p className="text-[10px] font-semibold text-gray-900 truncate" title={user.totalBookings || '0'}>
                               {user.totalBookings || '0'}
                             </p>
                           </div>
@@ -770,76 +771,119 @@ const AdminVerification = () => {
                   </div>
                 )}
 
-                {/* Verification Actions - Ultra Compact */}
-                <div className="bg-gray-50 rounded-lg p-2 border border-gray-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
-                      <svg className="w-2.5 h-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm5-4a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      Verification
-                    </h5>
+                {/* Verification Actions - Premium */}
+                <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200/60 shadow-lg shadow-slate-900/5 backdrop-blur-sm relative overflow-hidden">
+                  {/* Subtle background pattern */}
+                  <div className="absolute inset-0 opacity-[0.03]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-transparent to-slate-900"></div>
                   </div>
                   
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 flex-1">
-                      <div className="w-6 h-6 rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center">
-                        {(userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
-                          <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-                        )}
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-1 h-6 bg-gradient-to-b from-slate-400 to-slate-600 rounded-full"></div>
+                        <h5 className="text-sm font-semibold text-slate-800 uppercase tracking-[0.15em]">Verification Status</h5>
                       </div>
-                      <div className="text-xs">
-                        <p className="font-semibold text-gray-900">
-                          {(userType === 'truck' ? user.isVerified : user.verificationBadge) ? "Verified" : "Not Verified"}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {(userType === 'truck' ? user.isVerified : user.verificationBadge) 
-                            ? "Approved for service"
-                            : "Pending verification"
-                          }
-                        </p>
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+                        (userType === 'truck' ? user.isVerified : user.verificationBadge)
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                      }`}>
+                        {(userType === 'truck' ? user.isVerified : user.verificationBadge) ? "VERIFIED" : "PENDING"}
                       </div>
                     </div>
                     
-                    <button
-                      onClick={toggleVerification}
-                      disabled={updating}
-                      className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
-                        updating
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : (userType === 'truck' ? user.isVerified : user.verificationBadge)
-                          ? 'bg-gray-100 text-gray-900 border border-gray-300 hover:bg-gray-200'
-                          : 'bg-black text-white hover:bg-gray-800'
-                      }`}
-                    >
-                      {updating ? (
-                        <span className="flex items-center">
-                          <svg className="animate-spin h-2.5 w-2.5 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path fill="currentColor" d="M4 12a8 8 0 018-8v4a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v-4a2 2 0 01-2-2h12a2 2 0 012 2z"></path>
-                          </svg>
-                          Updating...
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`relative w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 ${
+                          (userType === 'truck' ? user.isVerified : user.verificationBadge)
+                            ? 'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300 shadow-lg shadow-emerald-500/20'
+                            : 'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300 shadow-md shadow-slate-400/10'
+                        }`}>
+                          {(userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
+                            <>
+                              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 rounded-2xl"></div>
+                              <svg className="w-6 h-6 text-emerald-600 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </>
+                          ) : (
+                            <>
+                              <div className="absolute inset-0 bg-gradient-to-br from-slate-200/50 to-slate-300/50 rounded-2xl"></div>
+                              <div className="w-3 h-3 bg-slate-400 rounded-full relative z-10"></div>
+                            </>
+                          )}
+                        </div>
+                        <div>
+                          <p className={`text-base font-semibold mb-1 transition-colors ${
+                            (userType === 'truck' ? user.isVerified : user.verificationBadge)
+                              ? 'text-emerald-800'
+                              : 'text-slate-800'
+                          }`}>
+                            {(userType === 'truck' ? user.isVerified : user.verificationBadge) 
+                              ? userType === 'truck' 
+                                ? "Verified Truck"
+                                : "Verified Account"
+                              : "Pending Verification"
+                            }
+                          </p>
+                          <p className="text-sm text-slate-600 font-medium">
+                            {(userType === 'truck' ? user.isVerified : user.verificationBadge) 
+                              ? userType === 'truck' 
+                                ? "This truck has been approved and verified"
+                                : "This account has been approved and verified"
+                              : userType === 'truck'
+                                ? "Awaiting admin verification and approval"
+                                : "Awaiting admin verification and approval"
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={toggleVerification}
+                        disabled={updating}
+                        className={`group relative px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${
+                          updating
+                            ? 'bg-slate-200 text-slate-500 cursor-not-allowed shadow-slate-300/30'
+                            : (userType === 'truck' ? user.isVerified : user.verificationBadge)
+                            ? 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:border-slate-400 shadow-slate-200/50 hover:shadow-slate-300/50'
+                            : 'bg-gradient-to-br from-slate-800 to-slate-900 text-white border border-slate-700 hover:from-slate-700 hover:to-slate-800 shadow-slate-900/30 hover:shadow-slate-900/40'
+                        }`}
+                      >
+                        <div className={`absolute inset-0 rounded-xl transition-opacity duration-300 ${
+                          updating
+                            ? 'opacity-0'
+                            : 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-white/20 to-transparent'
+                        }`}></div>
+                        
+                        <span className="relative flex items-center gap-2">
+                          {updating ? (
+                            <>
+                              <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path fill="currentColor" d="M4 12a8 8 0 018-8v4a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v-4a2 2 0 01-2-2h12a2 2 0 012 2z"></path>
+                              </svg>
+                              Processing...
+                            </>
+                          ) : (userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
+                            <>
+                              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                              Revoke Access
+                            </>
+                          ) : (
+                            <>
+                              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              Grant Access
+                            </>
+                          )}
                         </span>
-                      ) : (userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
-                        <span className="flex items-center">
-                          <svg className="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                          Revoke
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <svg className="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L5 21l4-4l4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                          </svg>
-                          Verify
-                        </span>
-                      )}
-                    </button>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

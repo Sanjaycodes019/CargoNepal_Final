@@ -34,7 +34,7 @@ const OwnerBookingCard = ({ booking, onStatusUpdate, onClick }) => {
       }) : "-";
   return (
     <div
-      className="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-300 hover:border-gray-400 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group transform hover:-translate-y-1"
+      className="bg-gradient-to-br from-white to-gray-50 rounded-xl border-0 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden group shadow-2xl"
       onClick={onClick}
     >
       {/* Enhanced Header Section */}

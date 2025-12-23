@@ -1751,11 +1751,11 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
     { status: 'BUSY', statusType: 'busy' });
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.25)] hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group shadow-lg relative">
+    <div className="bg-white rounded-2xl border-0 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.4)] hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group shadow-2xl relative">
       {/* Distance Badge - Top Right - Only show when location search is active */}
       {showDistanceBadge && distance !== undefined && distance !== null && (
         <div className="absolute top-3 right-3 z-10">
-          <div className="bg-white border border-gray-200 px-3 py-1.5 rounded-full text-xs font-medium shadow-sm flex items-center gap-1 text-gray-700">
+          <div className="bg-white border border-gray-100 px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center gap-1 text-gray-900">
             <Route className="w-3 h-3 text-blue-500" />
             {distance} km away
           </div>
@@ -1763,7 +1763,7 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
       )}
       
       {/* Top Section - Truck Info */}
-      <div className="bg-gradient-to-br from-slate-50 to-gray-100 px-4 sm:px-5 py-4 sm:py-5 border-b border-gray-200">
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 px-4 sm:px-5 py-4 sm:py-5 border-b border-gray-100">
         <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Truck Image/Avatar */}
           <div className="relative">
@@ -1780,11 +1780,11 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
                 />
               ) : null}
               <div
-                className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-300 to-slate-400"
+                className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-300 to-gray-400"
                 style={{ display: truck.imageUrl ? "none" : "flex" }}
               >
                 <svg
-                  className="w-8 h-8 sm:w-9 sm:h-9 text-slate-600"
+                  className="w-8 h-8 sm:w-9 sm:h-9 text-gray-700"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -1853,12 +1853,12 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
 
           {/* Title and Location */}
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm sm:text-base font-bold text-slate-800 mb-1 leading-snug line-clamp-2 tracking-tight">
+            <h4 className="text-sm sm:text-base font-bold text-gray-900 mb-1 leading-snug line-clamp-2 tracking-tight">
               {truck.title || 'Unnamed Truck'}
             </h4>
             <div className="flex items-center gap-1 mb-2">
-              <MapPin className="w-4 h-4 text-gray-700 flex-shrink-0" />
-              <p className="text-sm font-medium text-gray-700 truncate leading-tight">
+              <MapPin className="w-4 h-4 text-gray-800 flex-shrink-0" />
+              <p className="text-sm font-bold text-gray-900 truncate leading-tight">
                 {truck.location?.address ? truck.location.address.split(',')[0] : "Location not set"}
               </p>
             </div>
@@ -1869,7 +1869,7 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
-                      className={`w-4 h-4 ${i < Math.round(truck.averageRating) ? 'text-slate-800' : 'text-gray-300'}`}
+                      className={`w-4 h-4 ${i < Math.round(truck.averageRating) ? 'text-gray-900' : 'text-gray-300'}`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -1877,10 +1877,10 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm font-bold text-slate-800 leading-tight">
+                <span className="text-sm font-bold text-gray-900 leading-tight">
                   {truck.averageRating.toFixed(1)}
                 </span>
-                <span className="text-sm font-medium text-gray-600 leading-tight">
+                <span className="text-sm font-bold text-gray-700 leading-tight">
                   ({truck.totalReviews || 0})
                 </span>
               </div>
@@ -1890,7 +1890,7 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
       </div>
 
       {/* Bottom Section - Statistics */}
-      <div className="px-4 sm:px-5 py-4 sm:py-5 border-t border-gray-200 bg-gradient-to-br from-white to-slate-50">
+      <div className="px-4 sm:px-5 py-4 sm:py-5 border-t border-gray-100 bg-gradient-to-br from-white to-gray-50">
         <div className="grid grid-cols-3 gap-1 sm:gap-2 mb-1 text-center items-center justify-items-center w-full max-w-xs mx-auto">
           <StatItem 
             label={"TYPE"} 
@@ -1911,22 +1911,22 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
 
         {/* Truck Description */}
         {truck.description && (
-          <div className="mt-3 pt-3 border-t border-gray-200">
-              <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed tracking-wide">
+          <div className="mt-3 pt-3 border-t border-gray-100">
+              <p className="text-xs text-gray-700 font-bold line-clamp-2 leading-relaxed tracking-wide">
                 {truck.description}
               </p>
           </div>
         )}
 
         {/* Enhanced Owner Section */}
-        <div className="pt-1 border-t border-slate-200 w-full mt-1">
-          <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 text-left leading-tight">
+        <div className="pt-1 border-t border-gray-100 w-full mt-1">
+          <p className="text-[9px] sm:text-[10px] font-bold text-gray-600 uppercase tracking-wider mb-1 text-left leading-tight">
             Owner
           </p>
-          <div className="flex items-center gap-1.5 text-left border border-slate-100 rounded-md p-1.5 bg-slate-50">
+          <div className="flex items-center gap-1.5 text-left border border-gray-100 rounded-md p-1.5 bg-gray-50">
             {/* Owner Profile with Badges */}
             <div className="relative">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 overflow-hidden border border-white shadow-sm">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden border border-white shadow-md">
                 {truck.owner?.profileImageUrl ? (
                   <img
                     src={truck.owner.profileImageUrl}

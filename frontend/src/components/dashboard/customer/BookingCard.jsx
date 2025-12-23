@@ -57,7 +57,7 @@ const BookingCard = ({ booking, onCancel, onRefresh }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-lg border-0 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.4)] transition-all duration-300 shadow-2xl">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100">
         <div className="flex items-center justify-between gap-3">

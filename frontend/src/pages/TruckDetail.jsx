@@ -13,17 +13,17 @@ import logger from "../utils/logger.js";
 const DetailField = ({ label, value }) => (
   <div className="relative group">
     {/* Main content container - more compact */}
-    <div className="relative bg-white border border-slate-200/40 rounded-lg p-2.5 shadow-xs hover:shadow-sm transition-all duration-200 hover:border-slate-200/60">
+    <div className="relative bg-white border border-gray-100 rounded-lg p-2.5 shadow-sm hover:shadow-md transition-all duration-200 hover:border-gray-200">
       {/* Label with reduced spacing and contrast */}
       <div className="flex items-center gap-1.5 mb-1">
-        <div className="w-0.5 h-3 bg-slate-400/60 rounded-full"></div>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">
+        <div className="w-0.5 h-3 bg-gray-500 rounded-full"></div>
+        <p className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">
           {label}
         </p>
       </div>
 
       {/* Value with more compact typography */}
-      <p className="text-xs font-medium text-slate-700 leading-tight break-words">
+      <p className="text-xs font-bold text-gray-900 leading-tight break-words">
         {value}
       </p>
     </div>
@@ -117,9 +117,9 @@ const TruckReviews = ({ truckId, onReviewAdded }) => {
         Customer Reviews {reviews.length > 0 && `(${reviews.length})`}
       </h3>
       {reviews.length === 0 ? (
-        <div className="bg-slate-50 rounded-lg p-8 text-center border border-slate-200">
+        <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-100">
           <svg
-            className="w-16 h-16 mx-auto mb-4 text-slate-300"
+            className="w-16 h-16 mx-auto mb-4 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ const TruckReviews = ({ truckId, onReviewAdded }) => {
               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
             />
           </svg>
-          <p className="text-slate-500">
+          <p className="text-gray-600">
             No reviews yet. Be the first to review this truck!
           </p>
         </div>
@@ -141,12 +141,12 @@ const TruckReviews = ({ truckId, onReviewAdded }) => {
             {currentReviews.map((review) => (
               <div
                 key={review._id}
-                className="bg-white rounded-lg shadow-sm p-3 border border-slate-200 hover:shadow-md transition-shadow relative"
+                className="bg-white rounded-lg shadow-md p-3 border border-gray-100 hover:shadow-lg transition-shadow relative"
               >
                 {isOwner && (
                   <button
                     onClick={() => handleDeleteReview(review._id)}
-                    className="absolute top-2 right-2 text-slate-400 hover:text-red-600 transition-colors p-1"
+                    className="absolute top-2 right-2 text-gray-500 hover:text-red-600 transition-colors p-1"
                     title="Delete review"
                   >
                     <svg
@@ -182,7 +182,7 @@ const TruckReviews = ({ truckId, onReviewAdded }) => {
                             }}
                           />
                         ) : (
-                          <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
+                          <div className="w-full h-full bg-gray-900 rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-sm">
                               {(review.customer?.name || "A")
                                 .charAt(0)
@@ -1090,11 +1090,11 @@ const TruckDetail = () => {
 
             {/* Owner Information Section - Compact */}
             {truck.owner && (
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200 mb-4">
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mb-4">
                 <div className="flex items-center gap-3">
                   {/* Owner Photo */}
                   <div className="relative flex-shrink-0">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-200 border border-gray-300 shadow-sm overflow-hidden">
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center bg-gray-200 border border-gray-300 shadow-md overflow-hidden">
                       {truck.owner.profileImageUrl ? (
                         <img
                           src={truck.owner.profileImageUrl}
@@ -1107,7 +1107,7 @@ const TruckDetail = () => {
                         />
                       ) : null}
                       <div
-                        className="w-full h-full flex items-center justify-center rounded-full text-gray-700 text-sm font-bold"
+                        className="w-full h-full flex items-center justify-center rounded-full text-gray-900 text-sm font-bold"
                         style={{
                           display: truck.owner.profileImageUrl
                             ? "none"
@@ -1132,7 +1132,7 @@ const TruckDetail = () => {
                         {truck.owner.name}
                       </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-xs text-gray-600">
+                    <div className="grid grid-cols-2 gap-4 text-xs text-gray-700">
                       {/* Column 1: Email */}
                       <div className="space-y-1">
                         {truck.owner.email && (
