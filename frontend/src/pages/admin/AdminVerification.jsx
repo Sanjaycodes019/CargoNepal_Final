@@ -779,12 +779,12 @@ const AdminVerification = () => {
                   </div>
                   
                   <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-1 h-6 bg-gradient-to-b from-slate-400 to-slate-600 rounded-full"></div>
-                        <h5 className="text-sm font-semibold text-slate-800 uppercase tracking-[0.15em]">Verification Status</h5>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-slate-400 to-slate-600 rounded-full"></div>
+                        <h5 className="text-xs sm:text-sm font-semibold text-slate-800 uppercase tracking-[0.15em]">Verification Status</h5>
                       </div>
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+                      <div className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-medium border transition-all ${
                         (userType === 'truck' ? user.isVerified : user.verificationBadge)
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                           : 'bg-slate-100 text-slate-600 border-slate-200'
@@ -793,29 +793,29 @@ const AdminVerification = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className={`relative w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 ${
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border-2 flex items-center justify-center transition-all duration-300 ${
                           (userType === 'truck' ? user.isVerified : user.verificationBadge)
                             ? 'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300 shadow-lg shadow-emerald-500/20'
                             : 'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300 shadow-md shadow-slate-400/10'
                         }`}>
                           {(userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
                             <>
-                              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 rounded-2xl"></div>
-                              <svg className="w-6 h-6 text-emerald-600 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 rounded-xl sm:rounded-2xl"></div>
+                              <svg className="w-4 h-4 sm:w-6 sm:h-6 text-emerald-600 relative z-10" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
                             </>
                           ) : (
                             <>
-                              <div className="absolute inset-0 bg-gradient-to-br from-slate-200/50 to-slate-300/50 rounded-2xl"></div>
-                              <div className="w-3 h-3 bg-slate-400 rounded-full relative z-10"></div>
+                              <div className="absolute inset-0 bg-gradient-to-br from-slate-200/50 to-slate-300/50 rounded-xl sm:rounded-2xl"></div>
+                              <div className="w-2 h-2 sm:w-3 sm:h-3 bg-slate-400 rounded-full relative z-10"></div>
                             </>
                           )}
                         </div>
-                        <div>
-                          <p className={`text-base font-semibold mb-1 transition-colors ${
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm sm:text-base font-semibold mb-1 transition-colors ${
                             (userType === 'truck' ? user.isVerified : user.verificationBadge)
                               ? 'text-emerald-800'
                               : 'text-slate-800'
@@ -843,7 +843,7 @@ const AdminVerification = () => {
                       <button
                         onClick={toggleVerification}
                         disabled={updating}
-                        className={`group relative px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${
+                        className={`group relative px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
                           updating
                             ? 'bg-slate-200 text-slate-500 cursor-not-allowed shadow-slate-300/30'
                             : (userType === 'truck' ? user.isVerified : user.verificationBadge)
@@ -851,34 +851,37 @@ const AdminVerification = () => {
                             : 'bg-gradient-to-br from-slate-800 to-slate-900 text-white border border-slate-700 hover:from-slate-700 hover:to-slate-800 shadow-slate-900/30 hover:shadow-slate-900/40'
                         }`}
                       >
-                        <div className={`absolute inset-0 rounded-xl transition-opacity duration-300 ${
+                        <div className={`absolute inset-0 rounded-lg transition-opacity duration-300 ${
                           updating
                             ? 'opacity-0'
                             : 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-white/20 to-transparent'
                         }`}></div>
                         
-                        <span className="relative flex items-center gap-2">
+                        <span className="relative flex items-center gap-1.5 sm:gap-2">
                           {updating ? (
                             <>
-                              <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <svg className="animate-spin h-3 w-3 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path fill="currentColor" d="M4 12a8 8 0 018-8v4a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v-4a2 2 0 01-2-2h12a2 2 0 012 2z"></path>
                               </svg>
-                              Processing...
+                              <span className="hidden sm:inline">Processing...</span>
+                              <span className="sm:hidden">...</span>
                             </>
                           ) : (userType === 'truck' ? user.isVerified : user.verificationBadge) ? (
                             <>
-                              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                               </svg>
-                              Revoke Access
+                              <span className="hidden sm:inline">Revoke Access</span>
+                              <span className="sm:hidden">Revoke</span>
                             </>
                           ) : (
                             <>
-                              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
-                              Grant Access
+                              <span className="hidden sm:inline">Grant Access</span>
+                              <span className="sm:hidden">Grant</span>
                             </>
                           )}
                         </span>
