@@ -3,6 +3,7 @@ import { handleError } from '../utils/errorHandler.js';
 import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { useUiFeedback } from "../context/UiFeedbackContext";
 import NotificationBell from "./NotificationBell";
 import axiosInstance from "../utils/axiosInstance";
 
@@ -47,6 +48,7 @@ const Navbar = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(user);
+  const { confirm } = useUiFeedback();
 
   // Update local user state when context user changes
   useEffect(() => {
@@ -97,10 +99,19 @@ const Navbar = () => {
   logger.debug('Navbar - ProfileImageUrl', { profileImageUrl: currentUser?.profileImageUrl });
   logger.debug('Navbar - User name', { userName: currentUser?.name }); 
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-    setMobileMenuOpen(false);
+  const handleLogout = async () => {
+    const confirmed = await confirm({
+      title: "Logout",
+      message: "Are you sure you want to logout?",
+      confirmText: "Logout",
+      cancelText: "Cancel"
+    });
+    
+    if (confirmed) {
+      logout();
+      navigate("/login");
+      setMobileMenuOpen(false);
+    }
   };
 
   const showBell = isAuthenticated && (user?.role === "customer" || user?.role === "owner" || user?.role === "admin");

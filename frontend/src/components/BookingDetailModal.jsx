@@ -72,29 +72,29 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
 
   const getStatusStyles = (status) => {
     const styles = {
-      pending: 'bg-gray-100 text-gray-600 border-gray-200',
-      accepted: 'bg-blue-50 text-blue-700 border-blue-100',
-      declined: 'bg-red-50 text-red-700 border-red-100',
-      in_transit: 'bg-amber-50 text-amber-700 border-amber-100',
-      completed: 'bg-green-50 text-green-700 border-green-100',
+      pending: 'bg-gray-100 text-gray-600 border-gray-300',
+      accepted: 'bg-gray-100 text-gray-700 border-gray-300',
+      declined: 'bg-gray-100 text-gray-600 border-gray-300',
+      in_transit: 'bg-gray-100 text-gray-700 border-gray-300',
+      completed: 'bg-gray-900 text-white border-gray-900',
     };
-    return styles[status] || 'bg-gray-50 text-gray-500 border-gray-100';
+    return styles[status] || 'bg-gray-100 text-gray-600 border-gray-300';
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl shadow-gray-100 w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn border border-gray-100">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col border border-gray-300">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+        <div className="px-6 py-4 border-b border-gray-300 flex justify-between items-center bg-white">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight">Booking Details</h2>
+            <h2 className="text-xl sm:text-2xl font-black text-black uppercase tracking-tight">Booking Details</h2>
             {booking && <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1">Ref: {bookingId.slice(-8).toUpperCase()}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-gray-100 rounded-full text-gray-900 transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-full text-black transition-colors"
             aria-label="Close"
           >
             <CloseIcon className="w-5 h-5" />
@@ -133,9 +133,16 @@ const BookingDetailModal = ({ bookingId, isOpen, onClose, onStatusUpdate, userRo
                     <h3 className="text-base font-bold text-gray-900 truncate">
                       {booking.truck?.title || 'Heavy Load Truck'}
                     </h3>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${getStatusStyles(booking.status)}`}>
-                      {booking.status.replace('_', ' ')}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${getStatusStyles(booking.status)}`}>
+                        {booking.status.replace('_', ' ')}
+                      </span>
+                      {booking.paymentStatus === 'paid' && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider bg-gray-900 text-white border-gray-900">
+                          PAID
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <p className="text-sm text-gray-600 font-medium">
                     {userRole === 'owner' ? 'Client' : 'Provider'}: 

@@ -230,50 +230,20 @@ const NotificationBell = () => {
                         return;
                       }
                       
-                      // Handle payment notifications - navigate to booking details
-                      if (notification.type === 'payment' && notification.relatedId) {
-                        // Navigate to the booking details page with the booking ID
-                        navigate(`/owner/bookings?bookingId=${notification.relatedId}`);
+                      // Handle all notifications - open booking detail modal if relatedId exists
+                      if (notification.relatedId) {
+                        setSelectedBookingId(notification.relatedId);
+                        setShowBookingModal(true);
                         return;
                       }
                       
-                      // Handle booking notifications
-                      if (notification.type === 'booking' && notification.relatedId) {
-                        setSelectedBookingId(notification.relatedId);
-                        setShowBookingModal(true);
-                      } else if (notification.type === 'booking') {
+                      // Handle notifications without relatedId (navigate to appropriate pages)
+                      if (notification.type === 'booking') {
                         if (user.role === 'owner') {
                           navigate('/owner/bookings');
                         } else {
                           navigate('/customer/dashboard');
                         }
-                      }
-
-                      // Handle admin notifications
-                      if (notification.type === 'user_register' || notification.type === 'truck_register') {
-                        console.log('[NOTIF_DEBUG] Admin notification clicked:', {
-                          type: notification.type,
-                          actionUrl: notification.actionUrl,
-                          relatedId: notification.relatedId,
-                          _id: notification._id,
-                          fullNotif: notification
-                        });
-                        
-                        // Use actionUrl if available, same as AdminNotificationCenter
-                        if (notification.actionUrl) {
-                          console.log('[NOTIF_DEBUG] Navigating to actionUrl:', notification.actionUrl);
-                          navigate(notification.actionUrl);
-                        } else {
-                          console.log('[NOTIF_DEBUG] No actionUrl, using fallback');
-                          // Fallback navigation
-                          if (notification.type === 'user_register') {
-                            navigate('/admin/users');
-                          } else if (notification.type === 'truck_register') {
-                            navigate('/admin/fleet');
-                          }
-                        }
-                      } else if (notification.type === 'contact_form') {
-                        navigate('/admin/bookings'); // Admin can see contact submissions
                       }
                     }}
                     className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition ${
