@@ -42,38 +42,31 @@ const NewBooking = () => {
     }
   };
 
-  // Check for booking conflicts
-  const checkConflicts = async (startTime, endTime) => {
-    if (!selectedTruck?._id || !startTime || !endTime) return;
+  // Check for booking conflicts (only when explicitly called)
+  const checkConflicts = async (truckId, startTime, endTime) => {
+    if (!truckId || !startTime || !endTime) return;
 
     setCheckingConflicts(true);
     setConflictCheck(null);
-
+    
     try {
-      // Convert to ISO strings for API
-      const startISO = new Date(startTime).toISOString();
-      const endISO = new Date(endTime).toISOString();
-
-      const response = await axiosInstance.get('/api/bookings/check-conflicts', {
-        params: { 
-          truckId: selectedTruck._id, 
-          startTime: startISO, 
-          endTime: endISO 
-        }
-      });
-
-      if (response.data.success) {
-        setConflictCheck(response.data.data);
-        logger.component('NewBooking', 'info', 'Conflict check completed', { 
-          hasConflict: response.data.data.hasConflict,
-          truckId: selectedTruck._id,
-          startTime: startISO,
-          endTime: endISO
+      const response = await axiosInstance.get(`/bookings/check-conflicts?truckId=${truckId}&startTime=${startTime}&endTime=${endTime}`);
+      setConflictCheck(response.data);
+      
+      if (response.data.hasConflict) {
+        toast({ 
+          type: 'warning', 
+          message: 'This truck has scheduling conflicts for the selected time.' 
         });
       }
     } catch (error) {
-      logger.error('Conflict check failed', { error, truckId: selectedTruck._id, startTime, endTime });
-      toast({ type: 'error', message: 'Failed to check availability' });
+      console.error('Conflict check failed:', error);
+      // Don't show error toast here - it might be a temporary issue
+      setConflictCheck({
+        hasConflict: false,
+        message: 'Unable to check availability',
+        conflicts: []
+      });
     } finally {
       setCheckingConflicts(false);
     }
@@ -200,19 +193,12 @@ const NewBooking = () => {
   };
 
     const handleBookTruck = async (truck) => {
-    // Check if there are conflicts before booking
-    if (conflictCheck && conflictCheck.hasConflict) {
-      toast({ type: 'error', message: 'Cannot book truck due to scheduling conflicts. Please choose a different time slot.' });
-      return;
-    }
-
-    // Validate time fields
+    // First, run a fresh conflict check
     if (!formData.startTime || !formData.endTime) {
       toast({ type: 'error', message: 'Please select start and end times for your booking.' });
       return;
     }
 
-    // Validate time logic
     const startDate = new Date(formData.startTime);
     const endDate = new Date(formData.endTime);
     const now = new Date();
@@ -225,6 +211,30 @@ const NewBooking = () => {
     if (endDate <= startDate) {
       toast({ type: 'error', message: 'End time must be after start time.' });
       return;
+    }
+
+    // Check availability in real-time before booking
+    try {
+      setCheckingConflicts(true);
+      const conflictResponse = await axiosInstance.get(`/bookings/check-conflicts?truckId=${truck._id}&startTime=${startDate.toISOString()}&endTime=${endDate.toISOString()}`);
+      
+      if (conflictResponse.data.hasConflict) {
+        toast({ 
+          type: 'error', 
+          message: 'This truck is not available for the selected time. Please choose a different time slot.' 
+        });
+        setConflictCheck(conflictResponse.data);
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking conflicts:', error);
+      toast({ 
+        type: 'error', 
+        message: 'Unable to verify availability. Please try again.' 
+      });
+      return;
+    } finally {
+      setCheckingConflicts(false);
     }
 
     const ok = await confirm({

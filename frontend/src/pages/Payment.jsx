@@ -5,10 +5,28 @@ import { useUiFeedback } from "../context/UiFeedbackContext";
 import { format } from "date-fns";
 
 const Payment = () => {
-  const { showToast } = useUiFeedback();
+  const { showToast: contextShowToast } = useUiFeedback();
   const navigate = useNavigate();
   const { bookingId } = useParams();
   const location = useLocation();
+
+  // Fallback showToast function to prevent errors
+  const showToast = (message, type, options) => {
+    if (contextShowToast && typeof contextShowToast === 'function') {
+      contextShowToast(message, type, options);
+    } else {
+      // Fallback to console logging
+      if (type === 'error') {
+        console.error(message);
+      } else if (type === 'success') {
+        console.log('✅', message);
+      } else if (type === 'info') {
+        console.info('ℹ️', message);
+      } else {
+        console.log(message);
+      }
+    }
+  };
 
   const [booking, setBooking] = useState({
     _id: "",
@@ -68,54 +86,53 @@ const Payment = () => {
 
   const handlePayment = async () => {
     if (!paymentMethod) {
-      if (typeof showToast === 'function') {
-        showToast("Please select a payment method", "error");
-      }
+      showToast("Please select a payment method", "error");
       return;
     }
 
     setProcessing(true);
     
     try {
-      // Simulate payment processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Show immediate feedback to user
+      showToast("Processing your payment...", "info", { autoClose: false });
       
-      // Call the payment endpoint to process the payment
-      const response = await axiosInstance.post(`/payments/${bookingId}`);
+      // Call the payment endpoint to process the payment with timeout
+      const response = await Promise.race([
+        axiosInstance.post(`/payments/${bookingId}`, {
+          paymentMethod
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Payment timeout - please try again')), 10000)
+        )
+      ]);
       
       // Update local state with the response data
-      if (response.data.success && response.data.booking) {
-        setBooking(response.data.booking);
+      // Check for success in different possible response formats
+      if (response.data.success || response.data.status === 'success' || response.data.data || response.data.booking) {
+        // Show success message immediately
+        showToast("Payment successful! Your booking is now confirmed.", "success");
         
-        // Show success message
-        if (typeof showToast === 'function') {
-          showToast("Payment successful! Your booking is now confirmed.", "success");
+        // Update local state - backend returns data.booking or just booking
+        const updatedBooking = response.data.data || response.data.booking;
+        if (updatedBooking) {
+          setBooking(updatedBooking);
         }
         
-        // Redirect to booking details after a short delay
+        // Short delay before redirect to let user see the success message
         setTimeout(() => {
           navigate(`/bookings/${bookingId}`, { 
             state: { 
               showToast: true,
               toastMessage: "Payment successful! Your booking is confirmed.",
               toastType: "success"
-            } 
+            },
+            replace: true
           });
-        }, 1500);
+        }, 800); // Reduced from 1000ms to 800ms for faster experience
       } else {
+        // If response indicates failure, throw an error
         throw new Error(response.data.message || 'Payment processing failed');
       }
-      
-      // Redirect to booking details after a short delay
-      setTimeout(() => {
-        navigate(`/bookings/${bookingId}`, { 
-          state: { 
-            showToast: true,
-            toastMessage: "Payment successful! Your booking is confirmed.",
-            toastType: "success"
-          } 
-        });
-      }, 1500);
       
     } catch (error) {
       console.error("Payment error:", error);

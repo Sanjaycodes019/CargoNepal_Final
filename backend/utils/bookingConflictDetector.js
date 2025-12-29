@@ -23,6 +23,22 @@ const timeRangesOverlap = (startA, endA, startB, endB) => {
  */
 const checkBookingConflict = async (truckId, startTime, endTime, excludeBookingId = null) => {
   try {
+    // Validate inputs
+    if (!truckId || !startTime || !endTime) {
+      throw new Error('Missing required parameters: truckId, startTime, endTime');
+    }
+    
+    // Validate that startTime and endTime are valid dates
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      throw new Error('Invalid date format for startTime or endTime');
+    }
+    
+    if (start >= end) {
+      throw new Error('startTime must be before endTime');
+    }
     // Find existing bookings that might conflict
     const conflictQuery = {
       truck: truckId,
@@ -30,18 +46,18 @@ const checkBookingConflict = async (truckId, startTime, endTime, excludeBookingI
       $or: [
         // Overlap condition 1: New booking starts during existing booking
         {
-          startTime: { $lte: startTime },
-          endTime: { $gt: startTime }
+          startTime: { $lte: start },
+          endTime: { $gt: start }
         },
         // Overlap condition 2: New booking ends during existing booking
         {
-          startTime: { $lt: endTime },
-          endTime: { $gte: endTime }
+          startTime: { $lt: end },
+          endTime: { $gte: end }
         },
         // Overlap condition 3: New booking completely contains existing booking
         {
-          startTime: { $gte: startTime },
-          endTime: { $lte: endTime }
+          startTime: { $gte: start },
+          endTime: { $lte: end }
         }
       ]
     };

@@ -23,23 +23,38 @@ const getMyBookings = async (req, res) => {
 // Cancel booking
 const cancelBooking = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id)
+    const bookingId = req.params.id;
+    
+    if (!bookingId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Booking ID is required' 
+      });
+    }
+    
+    const booking = await Booking.findById(bookingId)
       .populate('truck', 'title')
       .populate('owner', 'name email')
       .populate('customer', 'name email');
 
     if (!booking) {
-      return res.status(404).json({ success: false, message: 'Booking not found' });
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Booking not found' 
+      });
     }
 
     if (booking.customer._id.toString() !== req.user.id) {
-      return res.status(403).json({ success: false, message: 'Not authorized' });
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Not authorized to cancel this booking' 
+      });
     }
 
     if (!['pending', 'accepted'].includes(booking.status)) {
       return res.status(400).json({
         success: false,
-        message: 'Only pending or accepted bookings can be cancelled'
+        message: `Cannot cancel booking with status '${booking.status}'. Only pending or accepted bookings can be cancelled`
       });
     }
 
