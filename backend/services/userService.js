@@ -84,15 +84,44 @@ const findUserById = async (userId, role, options = {}) => {
 };
 
 /**
- * Check if user with email exists
+ * Check if user with email exists across all user models
  * @param {string} email - User email
- * @param {string} role - User role
+ * @param {string} role - User role (for logging purposes)
  * @returns {Promise<boolean>} True if user exists
  */
 const userExists = async (email, role) => {
-  const UserModel = getUserModelByRole(role);
-  const user = await UserModel.findOne({ email });
-  return !!user;
+  // Check across all user models to prevent duplicate emails
+  const adminUser = await Admin.findOne({ email });
+  if (adminUser) {
+    logger.warn('REGISTRATION_DUPLICATE_EMAIL', { 
+      email, 
+      existingRole: 'admin', 
+      attemptedRole: role 
+    });
+    return true;
+  }
+
+  const ownerUser = await Owner.findOne({ email });
+  if (ownerUser) {
+    logger.warn('REGISTRATION_DUPLICATE_EMAIL', { 
+      email, 
+      existingRole: 'owner', 
+      attemptedRole: role 
+    });
+    return true;
+  }
+
+  const customerUser = await Customer.findOne({ email });
+  if (customerUser) {
+    logger.warn('REGISTRATION_DUPLICATE_EMAIL', { 
+      email, 
+      existingRole: 'customer', 
+      attemptedRole: role 
+    });
+    return true;
+  }
+
+  return false;
 };
 
 module.exports = {

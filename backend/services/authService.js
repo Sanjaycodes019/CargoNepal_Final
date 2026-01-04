@@ -19,7 +19,7 @@ const registerUser = async (userData) => {
   // Check if user already exists
   const exists = await userService.userExists(email, role);
   if (exists) {
-    throw new Error('User with this email already exists');
+    throw new Error('This email is already registered. Please use a different email or login to your existing account.');
   }
 
   // Hash password

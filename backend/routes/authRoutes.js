@@ -12,6 +12,7 @@ const {
   forgotPassword,
   verifyResetOTP,
   resetPassword,
+  checkEmail,
 } = require('../controllers/authController');
 
 // Import middleware
@@ -103,5 +104,8 @@ router.post('/reset-password', authLimiter, [
 
 // AUTHORIZED USER ROUTE - No rate limiting for authenticated requests
 router.get('/me', authMiddleware, getMe);
+
+// EMAIL CHECK ROUTE - For registration validation
+router.get('/check-email', authLimiter, checkEmail);
 
 module.exports = router;

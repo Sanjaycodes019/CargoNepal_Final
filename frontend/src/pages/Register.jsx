@@ -17,6 +17,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [emailChecking, setEmailChecking] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -28,11 +30,61 @@ const Register = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    
+    // Clear email error when email changes
+    if (e.target.name === 'email') {
+      setEmailError('');
+      setError('');
+    }
+  };
+
+  const checkEmailExists = async (email) => {
+    if (!email || email.length < 3) {
+      setEmailError('');
+      return;
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('');
+      return;
+    }
+
+    try {
+      setEmailChecking(true);
+      // Check if email exists by attempting to find user
+      const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      
+      if (data.exists) {
+        setEmailError('This email is already registered. Please use a different email or login.');
+      } else {
+        setEmailError('');
+      }
+    } catch (error) {
+      // If endpoint doesn't exist or fails, don't show error to user
+      setEmailError('');
+    } finally {
+      setEmailChecking(false);
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (formData.email) {
+      checkEmailExists(formData.email);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Check for email errors first
+    if (emailError) {
+      setError('Please fix the email error before continuing.');
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -113,10 +165,10 @@ const Register = () => {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-            Create Account
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            Create Your {formData.role.charAt(0).toUpperCase() + formData.role.slice(1)} Account
           </h2>
-          <p className="text-gray-600">Join CargoNepal and get started today</p>
+          <p className="text-gray-600">Join Vahan today</p>
         </div>
 
         {/* Form Card */}
@@ -156,17 +208,40 @@ const Register = () => {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all text-gray-900 placeholder-gray-400"
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <div className="relative">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all text-gray-900 placeholder-gray-400 ${
+                    emailError 
+                      ? 'border-red-300 focus:border-red-500' 
+                      : 'border-gray-300 focus:border-slate-900'
+                  }`}
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleEmailBlur}
+                />
+                {emailChecking && (
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {emailError && (
+                <p className="mt-2 text-sm text-red-600 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {emailError}
+                </p>
+              )}
             </div>
 
             {/* Phone and Address - Grid on larger screens */}

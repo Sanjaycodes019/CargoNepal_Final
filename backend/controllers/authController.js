@@ -527,6 +527,56 @@ const resetPassword = async (req, res) => {
 };
 
 // ============================================================================
+// CHECK EMAIL - Check if email already exists across all user types
+// ============================================================================
+
+const checkEmail = async (req, res) => {
+  const { email } = req.query;
+
+  logger.info('CHECK_EMAIL_REQUEST', { email });
+
+  try {
+    // Validate input
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
+      });
+    }
+
+    // Check if email exists across all user models
+    const exists = await userService.userExists(email, 'registration_check');
+
+    return res.json({
+      success: true,
+      exists,
+      message: exists ? 'Email already registered' : 'Email available'
+    });
+
+  } catch (error) {
+    logger.error('CHECK_EMAIL_ERROR', {
+      email,
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error during email check'
+    });
+  }
+};
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -539,4 +589,5 @@ module.exports = {
   forgotPassword,
   verifyResetOTP,
   resetPassword,
+  checkEmail,
 };
