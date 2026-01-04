@@ -4,6 +4,7 @@ const Notification = require('../models/NotificationModel');
 const { getRouteDistance, calculatePrice } = require('../utils/distanceCalculator');
 const { geocodeLocation } = require('../utils/geocoding');
 const bookingService = require('../services/bookingService');
+const { updateExpiredBookings, getEnhancedTruckStatus } = require('../services/scheduledJobsService');
 const logger = require('../utils/logger');
 
 // Create booking (customer) with smart conflict detection
@@ -711,6 +712,76 @@ const getBookingById = async (req, res) => {
   }
 };
 
+// ============================================================================
+// SCHEDULED JOB - Update expired bookings
+// ============================================================================
+
+const runScheduledJob = async (req, res) => {
+  try {
+    logger.info('SCHEDULED_JOB_TRIGGERED', { 
+      triggeredBy: req.user?.id || 'system',
+      role: req.user?.role || 'system'
+    });
+
+    const result = await updateExpiredBookings();
+
+    res.status(200).json({
+      success: true,
+      message: 'Scheduled job completed successfully',
+      data: result
+    });
+
+  } catch (error) {
+    logger.error('SCHEDULED_JOB_ENDPOINT_ERROR', {
+      error: error.message,
+      stack: error.stack
+    });
+
+    res.status(500).json({
+      success: false,
+      message: 'Error running scheduled job',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// ============================================================================
+// GET ENHANCED TRUCK STATUS
+// ============================================================================
+
+const getEnhancedStatus = async (req, res) => {
+  try {
+    const { truckId } = req.params;
+
+    if (!truckId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Truck ID is required'
+      });
+    }
+
+    const statusInfo = await getEnhancedTruckStatus(truckId);
+
+    res.status(200).json({
+      success: true,
+      data: statusInfo
+    });
+
+  } catch (error) {
+    logger.error('GET_ENHANCED_STATUS_ERROR', {
+      truckId: req.params?.truckId,
+      error: error.message,
+      stack: error.stack
+    });
+
+    res.status(500).json({
+      success: false,
+      message: 'Error getting truck status',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
 module.exports = { 
   createBooking, 
   checkBookingConflicts, 
@@ -718,5 +789,7 @@ module.exports = {
   getUserBookings,
   updateBooking,
   cancelBooking,
-  getBookingById
+  getBookingById,
+  runScheduledJob,
+  getEnhancedStatus
 };

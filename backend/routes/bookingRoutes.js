@@ -10,7 +10,9 @@ const {
   getUserBookings,
   updateBooking,
   cancelBooking,
-  getBookingById
+  getBookingById,
+  runScheduledJob,
+  getEnhancedStatus
 } = require('../controllers/bookingController');
 const { generateInvoice } = require('../controllers/invoiceController');
 const { createBookingValidation, idParamValidation, paginationValidation } = require('../middleware/validators');
@@ -151,6 +153,25 @@ router.get(
   authMiddleware, 
   idParamValidation, 
   generateInvoice
+);
+
+// ============================================================================
+// NEW ENDPOINTS FOR AUTOMATIC TRUCK AVAILABILITY
+// ============================================================================
+
+// Run scheduled job to update expired bookings (admin only)
+router.post(
+  '/scheduled-job/update-expired',
+  authMiddleware,
+  authorize('admin'),
+  runScheduledJob
+);
+
+// Get enhanced truck status with booking information
+router.get(
+  '/truck-status/:truckId',
+  authMiddleware,
+  getEnhancedStatus
 );
 
 module.exports = router;

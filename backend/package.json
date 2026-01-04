@@ -1,13 +1,14 @@
 {
-  "name": "cargonepal-backend",
+  "name": "upaye-backend",
   "version": "1.0.0",
-  "description": "CargoNepal MERN Backend",
+  "description": "Vahan MERN Backend - Modern Logistics Platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node utils/seedAdmin.js",
-    "seed:all": "node utils/seedData.js"
+    "seed:all": "node utils/seedData.js",
+    "scheduled-job": "node scripts/runScheduledJob.js"
   },
   "keywords": [],
   "author": "",

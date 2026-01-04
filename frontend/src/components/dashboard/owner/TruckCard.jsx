@@ -8,6 +8,7 @@ const TruckCard = ({ truck, onToggleAvailability, onEdit, onDelete }) => {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [enhancedStatus, setEnhancedStatus] = useState(null);
 
   const calculateAverageRating = (reviews) => {
     if (!reviews || reviews.length === 0) return null;
@@ -29,8 +30,29 @@ const TruckCard = ({ truck, onToggleAvailability, onEdit, onDelete }) => {
         setLoading(false);
       }
     };
-    if (truck._id) fetchReviews();
-  }, [truck._id]);
+
+    const fetchEnhancedStatus = async () => {
+      try {
+        const response = await axiosInstance.get(`/bookings/truck-status/${truck._id}`);
+        setEnhancedStatus(response.data.data);
+      } catch (error) {
+        console.error("Error fetching enhanced status:", error);
+        
+        // Fallback to basic status
+        const fallbackStatus = {
+          status: truck.available ? "Available" : "Busy",
+          statusType: truck.available ? "available" : "booked",
+          available: truck.available
+        };
+        setEnhancedStatus(fallbackStatus);
+      }
+    };
+
+    if (truck._id) {
+      fetchReviews();
+      fetchEnhancedStatus();
+    }
+  }, [truck._id, truck.available]);
 
   return (
     <div 
@@ -85,12 +107,16 @@ const TruckCard = ({ truck, onToggleAvailability, onEdit, onDelete }) => {
               </div>
             </div>
             
-            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${
-              truck.enhancedStatus?.statusType === 'available' 
-                ? "bg-white text-gray-700 border-gray-200"
-                : "bg-gray-900 text-white border-transparent"
+            <span className={`px-2.5 py-1 rounded-[10px] text-[9px] font-bold uppercase tracking-wider border transition-all duration-300 ${
+              enhancedStatus?.statusType === 'available' 
+                ? "bg-gradient-to-r from-white to-gray-50 text-gray-700 border-gray-300 shadow-sm"
+                : enhancedStatus?.statusType === 'booked'
+                ? "bg-gradient-to-r from-gray-800 to-gray-900 text-white border-transparent shadow-md"
+                : enhancedStatus?.statusType === 'owner_offline'
+                ? "bg-gradient-to-r from-red-50 to-red-100 text-red-700 border-red-200 shadow-sm"
+                : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 border-gray-300 shadow-sm"
             }`}>
-              {truck.enhancedStatus?.status || (truck.available ? "Available" : "Busy")}
+              {enhancedStatus?.status || (truck.available ? "Available" : "Busy")}
             </span>
           </div>
 
@@ -164,7 +190,7 @@ const TruckCard = ({ truck, onToggleAvailability, onEdit, onDelete }) => {
             onClick={() => onToggleAvailability(truck._id)}
             className="px-4 py-1.5 text-xs font-bold text-white bg-gray-900 rounded-lg hover:bg-black transition-colors"
           >
-            {truck.available ? "Mark Busy" : "Mark Available"}
+            {enhancedStatus?.available ? "Mark Busy" : "Mark Available"}
           </button>
         </div>
       </div>
