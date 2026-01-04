@@ -1745,10 +1745,36 @@ const StatItem = ({ label, value, isStatus = false, available = false, enhancedS
 };
 
 const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
-  // Use real enhanced status from backend, fallback to basic status if not available
-  const enhancedStatus = truck.enhancedStatus || (truck.available ? 
-    { status: 'AVAILABLE', statusType: 'available' } : 
-    { status: 'BUSY', statusType: 'busy' });
+  const [enhancedStatus, setEnhancedStatus] = useState(null);
+
+  // Fetch enhanced status from API
+  useEffect(() => {
+    const fetchEnhancedStatus = async () => {
+      try {
+        const response = await axiosInstance.get(`/bookings/truck-status/${truck._id}`);
+        setEnhancedStatus(response.data.data);
+      } catch (error) {
+        console.error("Error fetching enhanced status:", error);
+        
+        // Fallback to basic status
+        const fallbackStatus = {
+          status: truck.available ? "Available" : "Busy",
+          statusType: truck.available ? "available" : "booked",
+          available: truck.available
+        };
+        setEnhancedStatus(fallbackStatus);
+      }
+    };
+
+    if (truck._id) {
+      fetchEnhancedStatus();
+    }
+  }, [truck._id, truck.available]);
+
+  // Use enhanced status from API or fallback
+  const currentStatus = enhancedStatus || (truck.available ? 
+    { status: 'Available', statusType: 'available' } : 
+    { status: 'Busy', statusType: 'booked' });
 
   return (
     <div className="bg-white rounded-2xl border-0 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.4)] hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group shadow-2xl relative">
@@ -1898,10 +1924,10 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
           />
           <StatItem 
             label={"STATUS"} 
-            value={enhancedStatus.status?.toUpperCase() || 'BUSY'} 
+            value={currentStatus.status?.toUpperCase() || 'BUSY'} 
             isStatus={true}
-            available={enhancedStatus.available}
-            enhancedStatus={enhancedStatus}
+            available={currentStatus.available}
+            enhancedStatus={currentStatus}
           />
           <StatItem 
             label={"CAPACITY"} 
@@ -1989,14 +2015,14 @@ const TruckCard = ({ truck, onBookNow, distance, showDistanceBadge }) => {
           </Link>
           <button
             onClick={() => onBookNow(truck)}
-            disabled={!enhancedStatus.available}
+            disabled={!currentStatus.available}
             className={`flex-1 py-2 px-4 rounded-lg transition-colors text-sm font-medium leading-tight ${
-              enhancedStatus.available 
+              currentStatus.available 
                 ? 'bg-slate-900 text-white hover:bg-slate-800' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
-            {enhancedStatus.available ? 'Book Now' : 'Unavailable'}
+            {currentStatus.available ? 'Book Now' : 'Unavailable'}
           </button>
         </div>
       </div>
