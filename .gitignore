@@ -1,0 +1,61 @@
+# Root level .gitignore for CargoNepal project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Temporary folders
+tmp/
+temp/
+
+# Build artifacts
+dist/
+build/
+out/
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Dependency directories (at root level, if any)
+node_modules/
+
+# Environment files (at root level)
+.env
+.env.local
+.env.*.local
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Documentation build
+docs/build/
+
+# Backup files
+*.bak
+*.backup
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+
+# End of .gitignore
