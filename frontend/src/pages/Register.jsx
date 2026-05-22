@@ -168,7 +168,7 @@ const Register = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Create Your {formData.role.charAt(0).toUpperCase() + formData.role.slice(1)} Account
           </h2>
-          <p className="text-gray-600">Join Vahan today</p>
+          <p className="text-gray-600">Join Cargo Nepal today</p>
         </div>
 
         {/* Form Card */}
